@@ -25,16 +25,16 @@ function Header() {
 
           <ul className='hidden lg:flex gap-10 xl:gap-15 text-[18px] lg:text-[20px]'>
             <li><Link to={"/"} className='hover:text-[#1D4ED8] transition'>Home</Link></li>
-            <li><Link to={"/viewAll"} className='hover:text-[#1D4ED8] transition'>Movie</Link></li>
+            <li><Link to={"/movies"} className='hover:text-[#1D4ED8] transition'>Movie</Link></li>
             <li><Link to={""} className='hover:text-[#1D4ED8] transition'>Buy Ticket</Link></li>
           </ul>
 
           <div className='hidden lg:flex gap-4 xl:gap-5'>
             <p className='text-[#1D4ED8] text-[16px] lg:text-[18px] border-2 border-solid border-[#1D4ED8] rounded-[5px] py-2 px-4 lg:px-6 hover:bg-[#1D4ED8] hover:text-[#F8FAFC] cursor-pointer transition'>
-              SignIn
+              <Link to={"auth/signIn"}>SigIn</Link>
             </p>
             <p className='bg-[#1D4ED8] text-[#F8FAFC] text-[16px] lg:text-[18px] border-2 border-solid border-[#1D4ED8] rounded-[5px] py-2 px-4 lg:px-6 hover:text-[#1D4ED8] hover:bg-[#F8FAFC] cursor-pointer transition'>
-              SignUp
+              <Link to={"auth/signUp"}>SigUp</Link>
             </p>
           </div>
 
@@ -52,17 +52,17 @@ function Header() {
         <div className={`lg:hidden fixed inset-0 bg-white z-40 transition-all duration-300 ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}>
           <div className='flex flex-col items-center justify-center h-full gap-8'>
             <ul className='flex flex-col items-center gap-8 text-2xl'>
-              <li><a href="#" onClick={toggleMenu} className='hover:text-[#1D4ED8] transition'>Home</a></li>
-              <li><a href="#" onClick={toggleMenu} className='hover:text-[#1D4ED8] transition'></a></li>
-              <li><a href="#" onClick={toggleMenu} className='hover:text-[#1D4ED8] transition'>Buy Ticket</a></li>
+              <li><Link to={"/"} className='hover:text-[#1D4ED8] transition'>Home</Link></li>
+              <li><Link to={"/movies"} className='hover:text-[#1D4ED8] transition'>Movie</Link></li>
+              <li><Link to={"/"} className='hover:text-[#1D4ED8] transition'>Buy Ticket</Link></li>
             </ul>
 
             <div className='flex flex-col gap-4 w-64'>
               <p className='text-center text-[#1D4ED8] text-[18px] border-2 border-solid border-[#1D4ED8] rounded-[5px] py-3 px-6 hover:bg-[#1D4ED8] hover:text-[#F8FAFC] cursor-pointer transition'>
-                SignIn
+                <Link to={"/auth/signIn"}>SigIn</Link>
               </p>
               <p className='text-center bg-[#1D4ED8] text-[#F8FAFC] text-[18px] border-2 border-solid border-[#1D4ED8] rounded-[5px] py-3 px-6 hover:text-[#1D4ED8] hover:bg-[#F8FAFC] cursor-pointer transition'>
-                SignUp
+                <Link to={"/auth/signUp"}>SigUp</Link>
               </p>
             </div>
           </div>

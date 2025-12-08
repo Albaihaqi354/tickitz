@@ -39,9 +39,7 @@ function Details() {
   useEffect(() => {
     // Fetch Movie Details
     fetch(`https://api.themoviedb.org/3/movie/${id}?language=en-US`, {
-      method: "GET",
       headers: {
-        accept: "application/json",
         Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1Mjk1ZDJhYzg5NDE1MDdmNTFhNDMyNjUwMWU0MjBiYyIsIm5iZiI6MTc2NDM4MzY0Mi43MTQsInN1YiI6IjY5MmE1YjlhZTYyNTU3OTZhZjRjNDAwZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sGseaIHAZhc8l66sp3TUwoWXTLl7qyL_558oEkZgi6I"
       }
     })

@@ -43,9 +43,7 @@ function Home() {
 
   useEffect(() => {
     fetch("https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1", {
-      method: "GET",
       headers: {
-        accept: "application/json",
         Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1Mjk1ZDJhYzg5NDE1MDdmNTFhNDMyNjUwMWU0MjBiYyIsIm5iZiI6MTc2NDM4MzY0Mi43MTQsInN1YiI6IjY5MmE1YjlhZTYyNTU3OTZhZjRjNDAwZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sGseaIHAZhc8l66sp3TUwoWXTLl7qyL_558oEkZgi6I"
       }
     })
@@ -57,9 +55,7 @@ function Home() {
       .catch(err => console.error(err));
 
     fetch("https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1", {
-      method: "GET",
       headers: {
-        accept: "application/json",
         Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1Mjk1ZDJhYzg5NDE1MDdmNTFhNDMyNjUwMWU0MjBiYyIsIm5iZiI6MTc2NDM4MzY0Mi43MTQsInN1YiI6IjY5MmE1YjlhZTYyNTU3OTZhZjRjNDAwZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sGseaIHAZhc8l66sp3TUwoWXTLl7qyL_558oEkZgi6I"
       }
     })
@@ -71,7 +67,7 @@ function Home() {
   }, []);
 
   const handleMovieClick = (movieId) => {
-    navigate(`/detail/${movieId}`);
+    navigate(`/movies/${movieId}`);
   };
 
     window.scrollTo({
@@ -90,17 +86,8 @@ function Home() {
           font-family: 'Mulish', sans-serif;
         }
 
-        .scrollbar-hide::-webkit-scrollbar {
-          display: none;
-        }
-
-        .scrollbar-hide {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
       `}</style>
       <main className='mt-15 md:mt-15'>
-        {/* Hero Section */}
         <section className='flex flex-col lg:flex-row justify-between items-center mx-5 sm:mx-10 md:mx-20 lg:mx-30 gap-10 lg:gap-5'>
           <article className='w-full lg:w-3xl text-center lg:text-left'>
             <p className='text-[#1D4ED8] font-bold text-xl sm:text-lg md:text-xl mb-3 md:mb-5'>MOVIE TICKET PURCHASES #1 IN INDONESIA</p>
@@ -167,7 +154,7 @@ function Home() {
             <p className='text-3xl sm:text-4xl md:text-5xl w-full lg:w-3xl mx-auto'>Exciting Movies That Should Be Watched Today</p>
           </div>
           
-          <div className='sm:hidden mt-10 overflow-x-auto scrollbar-hide px-5'>
+          <div className='sm:hidden mt-10 overflow-x-auto [&::-webkit-scrollbar]:hidden px-5'>
             <div className='flex gap-5 pb-4'>
               {movies.map((movie) => (
                 <div 

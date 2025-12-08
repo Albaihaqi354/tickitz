@@ -50,16 +50,13 @@ function HomeView() {
         .catch(err => console.error(err));
       }, [])
 
-      // Menggunakan useMemo untuk menghindari cascading renders
       const filteredMovies = useMemo(() => {
         let result = movies;
 
-        // Filter by genre
         if (selectedGenre) {
           result = result.filter(movie => movie.genre_ids.includes(selectedGenre));
         }
 
-        // Filter by search query
         if (searchQuery) {
           result = result.filter(movie =>
             movie.title.toLowerCase().includes(searchQuery.toLowerCase())

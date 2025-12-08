@@ -10,11 +10,11 @@ import Detail from './pages/Details'
 function Router() {
   return (
     <Routes>
-        <Route path='/signUp' element={<SignUp/>}></Route>
-        <Route path='/signIn' element={<SignIn/>}></Route>
         <Route path='/' element={<Home/>}></Route>
-        <Route path='/viewAll' element={<HomeView/>}></Route>
-        <Route path='/detail/:id' element={<Detail/>}></Route>
+        <Route path='/auth/signUp' element={<SignUp/>}></Route>
+        <Route path='/auth/signIn' element={<SignIn/>}></Route>
+        <Route path='/movies' element={<HomeView/>}></Route>
+        <Route path='/movies/:id' element={<Detail/>}></Route>
     </Routes>
   )
 }

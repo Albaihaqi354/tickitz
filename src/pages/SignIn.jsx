@@ -48,7 +48,7 @@ function SignIn() {
                 <h2 className='text-[20px] font-medium mb-3 mt-5' style={{ fontFamily: "'Inter', sans-serif"}}>Welcome Back👋</h2>
                 <p className='text-gray-400 text-[15px] mb-2' style={{ fontFamily: "'Inter', sans-serif"}}>Sign in with your data that you entered during your registration</p>
             </div>
-            <div className="flex flex-col items-center">
+            <form className="flex flex-col items-center">
               <div className="w-full my-3">
                 <label htmlFor="email" className="text-base font-medium">
                   Email
@@ -128,7 +128,7 @@ function SignIn() {
               >
                 Login
               </button>
-            </div>
+            </form>
 
             <div className="flex items-center justify-center gap-3 text-gray-400 text-sm my-6">
               <span className="flex-1 h-px bg-gray-300"></span>{" "}

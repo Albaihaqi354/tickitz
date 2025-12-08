@@ -71,7 +71,7 @@ function SignUp() {
               </div>
             </div>
 
-            <div className="flex flex-col items-center">
+            <form className="flex flex-col items-center">
               <div className="w-full my-3">
                 <label htmlFor="email" className="text-base font-medium">
                   Email
@@ -158,7 +158,7 @@ function SignUp() {
                   Log in
                 </a>
               </p>
-            </div>
+            </form>
 
             <div className="flex items-center justify-center gap-3 text-gray-400 text-sm my-6">
               <span className="flex-1 h-px bg-gray-300"></span>{" "}

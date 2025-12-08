@@ -29,7 +29,7 @@ function FooterTop() {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 md:gap-5 mt-8 sm:mt-10 md:mt-12 lg:mt-15 mb-12 sm:mb-16 md:mb-20 lg:mb-25 px-5 sm:px-10">
+          <form className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 md:gap-5 mt-8 sm:mt-10 md:mt-12 lg:mt-15 mb-12 sm:mb-16 md:mb-20 lg:mb-25 px-5 sm:px-10">
             <input
               type="text"
               placeholder="First Name"
@@ -43,7 +43,7 @@ function FooterTop() {
             <button className="w-70 h-15 sm:w-auto bg-white text-[#2563EB] font-bold text-xl sm:text-lg md:text-xl border-2 border-white rounded-lg p-3 md:p-4 px-6 md:px-8  hover:bg-[#2563EB] hover:text-white transition whitespace-nowrap">
               Subscribe Now
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </>
