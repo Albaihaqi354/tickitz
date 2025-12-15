@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Header.jsx';
-import Footer from '../components/Footer.jsx';
-import FooterTop from '../components/FooterTop.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchNowPlaying, fetchUpcoming } from '../redux/slices/movie.slice';
 
 import ShieldIcon from '../assets/Shield.svg';
 import VectorIcon from '../assets/Vector.svg';
@@ -13,9 +12,31 @@ import ArrowRightIcon from "../assets/arrow-right.svg";
 
 function Home() {
   const navigate = useNavigate();
-  const [movies, setMovies] = useState([]);
-  const [upcomingMovies, setUpcomingMovies] = useState([]);
-  const [heroMovies, setHeroMovies] = useState([]);
+  const dispatch = useDispatch();
+  
+  const { nowPlaying, upcoming, loading } = useSelector((state) => state.movie);
+  
+  const [upcomingIndex, setUpcomingIndex] = React.useState(0);
+  
+  const movies = nowPlaying.slice(0, 4);
+  const allUpcoming = upcoming.slice(0, 8);
+  const heroMovies = nowPlaying.slice(0, 4);
+  
+  const upcomingMovies = allUpcoming.slice(upcomingIndex, upcomingIndex + 4);
+  
+  const handlePrevUpcoming = () => {
+    if (upcomingIndex > 0) {
+      setUpcomingIndex(upcomingIndex - 1);
+    }
+  };
+  
+  const handleNextUpcoming = () => {
+    if (upcomingIndex < allUpcoming.length - 4) {
+      setUpcomingIndex(upcomingIndex + 1);
+    }
+  };
+
+  const TMDB_IMAGE_BASE = import.meta.env.VITE_TMDB_IMAGE_BASE;
 
   const genreList = {
     28: "Action",
@@ -39,53 +60,39 @@ function Home() {
     37: "Western"
   };
 
-  const imageBase = "https://image.tmdb.org/t/p/w500";
-
   useEffect(() => {
-    fetch("https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1", {
-      headers: {
-        Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1Mjk1ZDJhYzg5NDE1MDdmNTFhNDMyNjUwMWU0MjBiYyIsIm5iZiI6MTc2NDM4MzY0Mi43MTQsInN1YiI6IjY5MmE1YjlhZTYyNTU3OTZhZjRjNDAwZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sGseaIHAZhc8l66sp3TUwoWXTLl7qyL_558oEkZgi6I"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setMovies(data.results.slice(0, 4));
-        setHeroMovies(data.results.slice(0, 4));
-      })
-      .catch(err => console.error(err));
-
-    fetch("https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1", {
-      headers: {
-        Authorization: "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1Mjk1ZDJhYzg5NDE1MDdmNTFhNDMyNjUwMWU0MjBiYyIsIm5iZiI6MTc2NDM4MzY0Mi43MTQsInN1YiI6IjY5MmE1YjlhZTYyNTU3OTZhZjRjNDAwZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.sGseaIHAZhc8l66sp3TUwoWXTLl7qyL_558oEkZgi6I"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setUpcomingMovies(data.results.slice(0, 4));
-      })
-      .catch(err => console.error(err));
-  }, []);
+    dispatch(fetchNowPlaying());
+    dispatch(fetchUpcoming());
+  }, [dispatch]);
 
   const handleMovieClick = (movieId) => {
     navigate(`/movies/${movieId}`);
   };
 
+  useEffect(() => {
     window.scrollTo({
-    top: 0,
-    left: 0,
-    behavior: 'smooth'
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
     });
+  }, []);
+
+  if (loading && movies.length === 0) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="text-2xl text-[#1D4ED8]">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <>
-      <Header />
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap');
         
         * {
           font-family: 'Mulish', sans-serif;
         }
-
       `}</style>
       <main className='mt-15 md:mt-15'>
         <section className='flex flex-col lg:flex-row justify-between items-center mx-5 sm:mx-10 md:mx-20 lg:mx-30 gap-10 lg:gap-5'>
@@ -108,7 +115,7 @@ function Home() {
                   }`}
                 >
                   <img 
-                    src={imageBase + movie.poster_path} 
+                    src={TMDB_IMAGE_BASE + movie.poster_path} 
                     alt={movie.title}
                     className='w-full h-full object-cover'
                   />
@@ -154,19 +161,19 @@ function Home() {
             <p className='text-3xl sm:text-4xl md:text-5xl w-full lg:w-3xl mx-auto'>Exciting Movies That Should Be Watched Today</p>
           </div>
           
-          <div className='sm:hidden mt-10 overflow-x-auto [&::-webkit-scrollbar]:hidden px-5'>
+          <div className='sm:hidden mt-10 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-5'>
             <div className='flex gap-5 pb-4'>
               {movies.map((movie) => (
                 <div 
                   key={movie.id} 
-                  className='flex-none w-72 cursor-pointer'
+                  className='flex-none w-64 cursor-pointer'
                   onClick={() => handleMovieClick(movie.id)}
                 >
                   <div className='relative group'>
                     <img
-                      src={imageBase + movie.poster_path}
+                      src={TMDB_IMAGE_BASE + movie.poster_path}
                       alt={movie.title}
-                      className='w-full h-96 rounded-xl object-cover'
+                      className='w-full h-[360px] rounded-xl object-cover'
                     />
                   </div>
                   <p className='mt-5 text-xl font-semibold'>{movie.title}</p>
@@ -182,12 +189,12 @@ function Home() {
             </div>
           </div>
 
-          <div className='hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 mt-10 gap-5 md:gap-7 mx-5 sm:mx-10 md:mx-20 lg:mx-30'>
+          <div className='hidden [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 mt-10 gap-5 md:gap-7 mx-5 sm:mx-10 md:mx-20 lg:mx-30'>
             {movies.map((movie) => (
               <div key={movie.id}>
                 <div className='relative group cursor-pointer' onClick={() => handleMovieClick(movie.id)}>
                   <img
-                    src={imageBase + movie.poster_path}
+                    src={TMDB_IMAGE_BASE + movie.poster_path}
                     alt={movie.title}
                     className='w-full h-96 sm:h-110 rounded-xl object-cover'
                   />
@@ -237,27 +244,43 @@ function Home() {
               <p className='text-3xl sm:text-4xl md:text-5xl mt-4 md:mt-7'>Exciting Movie Coming Soon</p>
             </div>
             <div className='hidden sm:flex gap-3 md:gap-5'>
-              <button className='bg-[#A0A3BD] w-14 h-14 md:w-18 md:h-18 rounded-full flex justify-center items-center cursor-pointer hover:bg-[#8a8d9f] transition'>
+              <button 
+                onClick={handlePrevUpcoming}
+                disabled={upcomingIndex === 0}
+                className={`w-14 h-14 md:w-18 md:h-18 rounded-full flex justify-center items-center transition ${
+                  upcomingIndex === 0 
+                    ? 'bg-[#A0A3BD] opacity-40 cursor-not-allowed' 
+                    : 'bg-[#A0A3BD] hover:bg-[#8a8d9f] cursor-pointer'
+                }`}
+              >
                 <img src={ArrowLeftIcon} alt="Arrow Left" className="w-5 md:w-6"/>
               </button>
-              <button className='bg-[#1D4ED8] w-14 h-14 md:w-18 md:h-18 rounded-full flex justify-center items-center cursor-pointer hover:bg-[#1a45b8] transition'>
+              <button 
+                onClick={handleNextUpcoming}
+                disabled={upcomingIndex >= allUpcoming.length - 4}
+                className={`w-14 h-14 md:w-18 md:h-18 rounded-full flex justify-center items-center transition ${
+                  upcomingIndex >= allUpcoming.length - 4
+                    ? 'bg-[#1D4ED8] opacity-40 cursor-not-allowed'
+                    : 'bg-[#1D4ED8] hover:bg-[#1a45b8] cursor-pointer'
+                }`}
+              >
                 <img src={ArrowRightIcon} alt="Arrow Right" className="w-5 md:w-6"/>
               </button>
             </div>
           </div>
 
-          <div className='sm:hidden mt-10 overflow-x-auto scrollbar-hide px-5'>
+          <div className='sm:hidden mt-10 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-5'>
             <div className='flex gap-5 pb-4'>
               {upcomingMovies.map((movie) => (
                 <div 
                   key={movie.id} 
-                  className='flex-none w-72 cursor-pointer'
+                  className='flex-none w-64 cursor-pointer'
                   onClick={() => handleMovieClick(movie.id)}
                 >
                   <img
-                    src={imageBase + movie.poster_path}
+                    src={TMDB_IMAGE_BASE + movie.poster_path}
                     alt={movie.title}
-                    className='w-full h-96 rounded-xl object-cover'
+                    className='w-full h-[360px] rounded-xl object-cover'
                   />
                   <p className='mt-5 text-xl font-semibold'>{movie.title}</p>
                   <div className='flex gap-3 mt-3 flex-wrap'>
@@ -272,7 +295,9 @@ function Home() {
             </div>
           </div>
 
-          <div className='hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 mt-10 gap-5 md:gap-7 mx-5 sm:mx-10 md:mx-20 lg:mx-30'>
+          <div 
+            className='hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 mt-10 gap-5 md:gap-7 mx-5 sm:mx-10 md:mx-20 lg:mx-30 transition-all duration-500'
+          >
             {upcomingMovies.map((movie) => (
               <div 
                 key={movie.id}
@@ -280,9 +305,9 @@ function Home() {
                 onClick={() => handleMovieClick(movie.id)}
               >
                 <img
-                  src={imageBase + movie.poster_path}
+                  src={TMDB_IMAGE_BASE + movie.poster_path}
                   alt={movie.title}
-                  className='w-full h-96 sm:h-110 rounded-xl object-cover hover:opacity-80 transition'
+                  className='w-full h-[360px] sm:h-[400px] lg:h-[440px] rounded-xl object-cover hover:opacity-80 transition'
                 />
                 <p className='mt-5 text-xl md:text-2xl font-semibold'>{movie.title}</p>
                 <p className='mt-2 text-base font-bold md:text-lg text-[#1D4ED8]'>
@@ -300,8 +325,6 @@ function Home() {
           </div>
         </section>
       </main>
-      <FooterTop />
-      <Footer />
     </>
   );
 }
