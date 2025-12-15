@@ -40,7 +40,7 @@ function FooterTop() {
               placeholder="Email Address"
               className="w-70 h-15 sm:w-auto text-white text-base sm:text-lg md:text-xl border-2 border-white rounded-lg p-3 md:p-4 focus:outline-none focus:border-white focus:ring-2 focus:ring-white transition"
             />
-            <button className="w-70 h-15 sm:w-auto bg-white text-[#2563EB] font-bold text-xl sm:text-lg md:text-xl border-2 border-white rounded-lg p-3 md:p-4 px-6 md:px-8  hover:bg-[#2563EB] hover:text-white transition whitespace-nowrap">
+            <button className="w-70 h-15 sm:w-auto cursor-pointer bg-white text-[#2563EB] font-bold text-xl sm:text-lg md:text-xl border-2 border-white rounded-lg p-3 md:p-4 px-6 md:px-8  hover:bg-[#2563EB] hover:text-white transition whitespace-nowrap">
               Subscribe Now
             </button>
           </form>
