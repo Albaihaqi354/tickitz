@@ -84,13 +84,6 @@ function Order() {
   return (
     <>
       <Header />
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap');
-        
-        * {
-          font-family: 'Mulish', sans-serif;
-        }
-      `}</style>
       <main className='bg-[#A0A3BD33]'>
         <section className='pt-10'>
           <div className="hidden md:flex justify-center items-center gap-5 text-center mb-10">
