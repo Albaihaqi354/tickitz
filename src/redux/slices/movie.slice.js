@@ -27,7 +27,7 @@ export const fetchMovieDetail = createAsyncThunk(
 export const fetchMovieCredits = createAsyncThunk(
   "movie/fetchMovieCredits",
   async (id) => {
-    return await tmdbFetch(`/movie/${id}/credits?language=en-US`);
+    return await tmdbFetch(`/movies/${id}/credits?language=en-US`);
   }
 );
 

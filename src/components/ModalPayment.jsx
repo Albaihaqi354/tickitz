@@ -3,13 +3,6 @@ import React from "react";
 function ModalPayment() {
   return (
     <>
-      <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap');
-                
-                * {
-                font-family: 'Mulish', sans-serif;
-                }
-            `}</style>
       <main>
         <div className="absolute flex w-screen h-screen inset-0 items-center justify-center after:absolute after:inset-0 after:z-10 after:bg-black/50">
           <div className="bg-white w-130 h-130 flex flex-col rounded-lg z-20">

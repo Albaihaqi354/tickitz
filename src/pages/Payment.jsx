@@ -14,14 +14,6 @@ function Payment() {
   return (
     <>
       <Header />
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap');
-        * {
-          font-family: 'Mulish', sans-serif;
-        }
-      `}</style>
-
       <div className="min-h-screen bg-gray-100 py-10 px-4">
         <div className="max-w-2xl mx-auto">
           <section className='pt-10'>

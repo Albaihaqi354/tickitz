@@ -3,13 +3,6 @@ import OrderHistory from '../components/OrderHistory'
 function Profile() {
   return (
     <>
-        <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap');
-
-        * {
-          font-family: 'Mulish', sans-serif;
-        }
-      `}</style>
         <main className='bg-[#A0A3BD33] flex justify-center pr-15 pl-15'>
             <section className='bg-white w-1/4 m-10 rounded-3xl'>
                 <div className='flex justify-between m-8 items-center'>
@@ -60,9 +53,9 @@ function Profile() {
                     <p className='text-xl text-[#AAAAAA]'>Order History</p>
                 </section>
 
-                <OrderHistory/>
+                {/* <OrderHistory/> */}
                 
-                {/* <section className='bg-white m-10 rounded-3xl gap-15 p-10 pt-15'>
+                <section className='bg-white m-10 rounded-3xl gap-15 p-10 pt-15'>
                     <p className='text-xl'>Details Information</p>
                     <div className="border-t-2 border-[#DEDEDE] w-full mt-8"></div>
                     <form action="" className='flex justify-between gap-10 mt-10'>
@@ -95,7 +88,7 @@ function Profile() {
                             <input type="password" placeholder='Confirm your password' className='h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl' />  
                         </div>
                     </form>
-                </section> */}
+                </section>
 
             </section>
         </main>

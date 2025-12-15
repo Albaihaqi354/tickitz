@@ -87,13 +87,6 @@ function Home() {
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap');
-        
-        * {
-          font-family: 'Mulish', sans-serif;
-        }
-      `}</style>
       <main className='mt-15 md:mt-15'>
         <section className='flex flex-col lg:flex-row justify-between items-center mx-5 sm:mx-10 md:mx-20 lg:mx-30 gap-10 lg:gap-5'>
           <article className='w-full lg:w-3xl text-center lg:text-left'>

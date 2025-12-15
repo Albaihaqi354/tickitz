@@ -4,13 +4,6 @@ import EbvLogo from '../assets/ebv.svg';
 function OrderHistory() {
   return (
     <main>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap');
-
-        * {
-          font-family: 'Mulish', sans-serif;
-        }
-      `}</style>
       <section className="w-full">
         <section className="bg-white m-10 rounded-3xl gap-15 p-10 pt-15">
           <div className="flex justify-between items-center">

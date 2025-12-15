@@ -35,13 +35,6 @@ function SignIn() {
 
   return (
     <>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Mulish:wght@400;500;600;700&display=swap');
-        * {
-          font-family: 'Mulish', sans-serif;
-        }
-      `}</style>
-
       <div className="relative min-h-screen">
         <div className="fixed inset-0 w-full h-full z-0">
           <img src={Background} alt="Background" className="w-full h-full object-cover"/>
