@@ -1,4 +1,5 @@
 import OrderHistory from '../components/OrderHistory'
+import Star from '../assets/star.svg'
 
 function Profile() {
   return (
@@ -23,7 +24,10 @@ function Profile() {
                 
                 <div className='m-8'>
                     <p className='text-[#4E4B66] text-xl font-semibold'>Loyality Point</p>
-                    <div className='bg-[#1D4ED8] p-5 rounded-3xl mt-8'>
+                    <div className='bg-[#1D4ED8] relative p-5 rounded-3xl mt-8'>
+                        <div className="absolute -top-27 right-10 w-10 h-10 sm:w-10 sm:h-10 md:w-28 md:h-28 lg:w-28 lg:h-28 bg-white/40 rounded-full translate-x-1/2 translate-y-1/2"></div>
+                        <div className="absolute -top-18 right-5 w-10 h-10 sm:w-10 sm:h-10 md:w-28 md:h-28 lg:w-28 lg:h-28 bg-white/40 rounded-full translate-x-1/2 translate-y-1/2"></div>
+                        <img src={Star} alt="Background" className=" absolute -top-8 right-8 w-15 h-15 translate-x-1/2 translate-y-1/2 object-cover"/>
                         <p className='text-white text-2xl'>Moviegoers</p>
                         <div className='mt-10'>
                             <p className='text-2xl font-semibold text-white'>
@@ -53,7 +57,7 @@ function Profile() {
                     <p className='text-xl text-[#AAAAAA]'>Order History</p>
                 </section>
 
-                {/* <OrderHistory/> */}
+                <OrderHistory/>
                 
                 <section className='bg-white m-10 rounded-3xl gap-15 p-10 pt-15'>
                     <p className='text-xl'>Details Information</p>
@@ -71,21 +75,6 @@ function Profile() {
                             <input type="text" className='h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl' />   
                             <label htmlFor="" className='text-xl text-[#4E4B66] mt-5'>Phone Number</label>
                             <input type="number" className='h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl' />   
-                        </div>
-                    </form>
-                </section>
-                
-                <section className='bg-white m-10 rounded-3xl gap-15 p-10 pt-15'>
-                    <p className='text-xl'>Account and Privacy</p>
-                    <div className="border-t-2 border-[#DEDEDE] w-full mt-8"></div>
-                    <form action="" className='flex justify-between gap-10 mt-10'>
-                        <div className='flex flex-col w-1/2'>
-                            <label htmlFor="" className='text-xl text-[#4E4B66]'>New Password</label>
-                            <input type="password" placeholder='Write your password' className='h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl' />  
-                        </div>
-                        <div className='flex flex-col w-1/2'>
-                            <label htmlFor="" className='text-xl text-[#4E4B66]'>Confirm Password</label>
-                            <input type="password" placeholder='Confirm your password' className='h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl' />  
                         </div>
                     </form>
                 </section>
