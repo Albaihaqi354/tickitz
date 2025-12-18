@@ -20,7 +20,7 @@ function Header() {
     dispatch(logoutUser())
       .unwrap()
       .then(() => {
-        navigate("/");
+        navigate("/auth/signIn");
       })
       .catch((error) => {
         console.error("Logout failed:", error);
