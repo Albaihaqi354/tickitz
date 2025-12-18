@@ -6,7 +6,7 @@ import Router from './Router.jsx'
 // import UserProvider from './contexts/userManagement/UserProvider.jsx'
 import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
-import { store, persistor } from './redux/store' // HILANGKAN
+import { store, persistor } from './redux/store'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

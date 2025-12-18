@@ -1,15 +1,30 @@
 import React, { useState } from "react";
 import TickitzLogo from "../assets/Tickitz2.svg";
-import { Link } from "react-router";
-import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router";
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../redux/slices/auth.slice";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const user = useSelector(state => state.auth.user);
   const firstLetter = user?.email?.charAt(0).toUpperCase() || "";
+  
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUser())
+      .unwrap()
+      .then(() => {
+        navigate("/");
+      })
+      .catch((error) => {
+        console.error("Logout failed:", error);
+      });
   };
 
   const isLoggedIn = !!user;
@@ -17,7 +32,9 @@ function Header() {
   return (
     <header className="pt-6 pb-3 px-5 sm:px-10 md:px-20 lg:px-30">
       <div className="flex justify-between items-center">
-        <img src={TickitzLogo} className="w-28 sm:w-32 md:w-35 lg:w-45 z-50" />
+        <Link to="/">
+          <img src={TickitzLogo} className="w-28 sm:w-32 md:w-35 lg:w-45 z-50" />
+        </Link>
 
         <ul className="hidden lg:flex gap-10 xl:gap-15 text-[18px] lg:text-[20px]">
           <li><Link to="/" className="hover:text-[#1D4ED8]">Home</Link></li>
@@ -26,9 +43,9 @@ function Header() {
         </ul>
 
         {isLoggedIn ? (
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-4">
             {!user?.profile_photo ? (
-              <div className="w-15 h-15 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center text-lg font-bold border">
+              <div className="w-10 h-10 rounded-full bg-[#1D4ED8] text-white flex items-center justify-center text-lg font-bold border">
                 {firstLetter}
               </div>
             ) : (
@@ -38,15 +55,21 @@ function Header() {
                 className="w-10 h-10 rounded-full object-cover border"
               />
             )}
+            <button
+              onClick={handleLogout}
+              className="text-base font-medium text-white bg-red-600 py-2 px-4 rounded-md hover:bg-red-700 transition-colors"
+            >
+              Logout
+            </button>
           </div>
         ) : (
           <div className="hidden lg:flex gap-4">
-            <p className="text-[#1D4ED8] border-2 border-[#1D4ED8] rounded-[5px] py-2 px-4">
-              <Link to="/auth/signIn">Sign In</Link>
-            </p>
-            <p className="bg-[#1D4ED8] text-white border-2 border-[#1D4ED8] rounded-[5px] py-2 px-4">
-              <Link to="/auth/signUp">Sign Up</Link>
-            </p>
+            <Link to="/auth/signIn" className="text-[#1D4ED8] border-2 border-[#1D4ED8] rounded-[5px] py-2 px-4 text-center">
+              Sign In
+            </Link>
+            <Link to="/auth/signUp" className="bg-[#1D4ED8] text-white border-2 border-[#1D4ED8] rounded-[5px] py-2 px-4 text-center">
+              Sign Up
+            </Link>
           </div>
         )}
 
@@ -67,33 +90,42 @@ function Header() {
       >
         <div className="flex flex-col items-center justify-center h-full gap-8">
           <ul className="flex flex-col items-center gap-8 text-2xl">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/movies">Movie</Link></li>
-            <li><Link to="/">Buy Ticket</Link></li>
+            <li><Link to="/" onClick={toggleMenu}>Home</Link></li>
+            <li><Link to="/movies" onClick={toggleMenu}>Movie</Link></li>
+            <li><Link to="/movies/payment" onClick={toggleMenu}>Buy Ticket</Link></li>
           </ul>
 
           <div className="flex flex-col gap-4 w-64 items-center">
             {isLoggedIn ? (
-              !user?.profile_photo ? (
-                <div className="w-20 h-20 rounded-full bg-blue-600 text-white flex items-center justify-center text-4xl font-bold border">
-                  {firstLetter}
-                </div>
-              ) : (
-                <img
-                  src={user.profile_photo}
-                  alt={user.email}
-                  className="w-20 h-20 rounded-full object-cover border"
-                />
-              )
+              <>
+                {!user?.profile_photo ? (
+                  <div className="w-20 h-20 rounded-full bg-blue-600 text-white flex items-center justify-center text-4xl font-bold border">
+                    {firstLetter}
+                  </div>
+                ) : (
+                  <img
+                    src={user.profile_photo}
+                    alt={user.email}
+                    className="w-20 h-20 rounded-full object-cover border"
+                  />
+                )}
+                <p className="text-gray-800 text-center">{user.email}</p>
+                <button
+                  onClick={handleLogout}
+                  className="text-lg text-white bg-red-600 rounded-[5px] py-3 px-6 text-center w-full hover:bg-red-700 transition-colors"
+                >
+                  Logout
+                </button>
+              </>
             ) : (
               <>
-                <p className="text-[#1D4ED8] text-[18px] border-2 border-[#1D4ED8] rounded-[5px] py-3 px-6 text-center">
-                  <Link to="/auth/signIn">Sign In</Link>
-                </p>
+                <Link to="/auth/signIn" onClick={toggleMenu} className="text-[#1D4ED8] text-[18px] border-2 border-[#1D4ED8] rounded-[5px] py-3 px-6 text-center w-full">
+                  Sign In
+                </Link>
 
-                <p className="bg-[#1D4ED8] text-white text-[18px] border-2 border-[#1D4ED8] rounded-[5px] py-3 px-6 text-center">
-                  <Link to="/auth/signUp">Sign Up</Link>
-                </p>
+                <Link to="/auth/signUp" onClick={toggleMenu} className="bg-[#1D4ED8] text-white text-[18px] border-2 border-[#1D4ED8] rounded-[5px] py-3 px-6 text-center w-full">
+                  Sign Up
+                </Link>
               </>
             )}
           </div>
