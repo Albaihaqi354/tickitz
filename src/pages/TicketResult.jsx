@@ -43,8 +43,8 @@ function TicketResult() {
   return (
     <>
       <Header />
-      <section className="flex flex-col lg:flex-row min-h-screen bg-[#A0A3BD33]">
-        <section className="relative w-full lg:w-1/2 min-h-[50vh] lg:min-h-full no-print">
+      <section className="grid grid-cols-1 lg:grid-cols-2 min-h-screen bg-[#A0A3BD33]">
+        <section className="relative min-h-[50vh] lg:min-h-full no-print">
           <img
             src={Background}
             alt="Background"
@@ -75,7 +75,7 @@ function TicketResult() {
           </div>
         </section>
 
-        <section className="w-full lg:w-1/2 flex flex-col items-center justify-center py-10 lg:py-0">
+        <section className="flex flex-col items-center justify-center py-10 lg:py-0">
           <div className="bg-white w-full max-w-[360px] p-6 rounded-xl flex flex-col items-center mt-8">
             <img
               src={QrCode}
@@ -86,7 +86,7 @@ function TicketResult() {
             <div className="border-t-2 border-dashed border-gray-400 w-full my-6"></div>
 
             <div className="w-full text-sm">
-              <div className="flex justify-between">
+              <div className="grid grid-cols-2">
                 <div>
                   <p className="text-gray-400 text-[16px]">Movie</p>
                   <p className="font-semibold text-[18px] truncate" title={ticketData.movie.title}>{ticketData.movie.title}</p>
@@ -101,7 +101,7 @@ function TicketResult() {
                 </div>
               </div>
 
-              <div className="flex justify-between mt-4">
+              <div className="grid grid-cols-2 mt-4">
                 <div>
                   <p className="text-gray-400 text-[16px]">Date</p>
                   <p className="font-semibold text-[18px]">{formatDate(ticketData.showDate)}</p>
@@ -112,7 +112,7 @@ function TicketResult() {
                 </div>
               </div>
 
-              <div className="flex justify-between mt-4">
+              <div className="grid grid-cols-2 mt-4">
                 <div>
                   <p className="text-gray-400 text-[16px]">Count</p>
                   <p className="font-semibold text-[18px]">{ticketData.selectedSeats.length} pcs</p>

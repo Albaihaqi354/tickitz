@@ -36,7 +36,6 @@ function ButtonScrollToTop() {
           className="fixed bottom-8 right-8 z-50 flex items-center justify-center w-12 h-12 p-3 bg-blue-500 rounded-full shadow-lg text-white transition-all duration-300 ease-in-out hover:bg-blue-700 hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
           aria-label="Scroll to top"
         >
-          {/* Ikon panah ke atas menggunakan SVG */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
