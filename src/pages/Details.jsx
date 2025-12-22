@@ -55,7 +55,7 @@ function Details() {
       <>
         <Header />
         <div className="flex items-center justify-center min-h-screen">
-          <div className="text-2xl text-[#1D4ED8]">Loading...</div>
+          <div className="text-xl sm:text-2xl text-[#1D4ED8]">Loading...</div>
         </div>
         <Footer />
       </>
@@ -67,7 +67,7 @@ function Details() {
       <>
         <Header />
         <div className="flex items-center justify-center min-h-screen">
-          <div className="text-2xl text-red-500">Movie not found</div>
+          <div className="text-xl sm:text-2xl text-red-500">Movie not found</div>
         </div>
         <Footer />
       </>
@@ -77,58 +77,60 @@ function Details() {
   return (
     <>
       <Header />
-      <main>
+      <main className="overflow-x-hidden">
         <section className="relative -z-20">
-          <img 
-            src={movie.backdrop_path ? backdropBase + movie.backdrop_path : TMDB_IMAGE_BASE + movie.poster_path} 
-            alt={movie.title}
-            className="w-full h-170 sm:h-80 md:h-96 lg:h-125 object-cover"
-          />
-          <div className="absolute inset-0 bg-black/55 flex items-center justify-start px-5 sm:px-10 md:px-15 lg:pl-20" />
+          <div className="h-100 sm:h-full md:aspect-16/7 lg:aspect-21/9">
+            <img 
+              src={movie.backdrop_path ? backdropBase + movie.backdrop_path : TMDB_IMAGE_BASE + movie.poster_path} 
+              alt={movie.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent md:bg-linear-to-r md:from-black md:via-black/70 md:to-transparent" />
         </section>
 
-        <section className="-mt-90 sm:-mt-55 px-5 sm:px-10 md:px-15 lg:px-30 py-10">
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className='flex justify-center'>
+        <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 sm:py-8 md:py-10 -mt-70 lg:-mt-60 relative z-10">
+          <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
+            <div className='flex justify-center lg:justify-start'>
               <img 
                 src={movie.poster_path ? TMDB_IMAGE_BASE + movie.poster_path : 'https://via.placeholder.com/400x600?text=No+Image'} 
                 alt={movie.title}
-                className="w-100 sm:w-80 h-full rounded-xl object-cover shadow-lg"
+                className="w-80 lg:w-72 xl:w-80 h-auto rounded-xl object-cover shadow-lg"
               />
             </div>
 
-            <div className="flex-1 lg:mt-55">
-              <h1 className="text-3xl text-center lg:text-left md:text-4xl font-semibold">{movie.title}</h1>
+            <div className="flex-1 mt-4 lg:mt-60">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-center lg:text-left">{movie.title}</h1>
               
-              <div className="flex gap-3 mt-4 flex-wrap justify-center lg:justify-start">
+              <div className="flex flex-wrap gap-2 sm:gap-3 mt-3 sm:mt-4 justify-center lg:justify-start">
                 {movie.genres && movie.genres.slice(0, 3).map(genre => (
-                  <span key={genre.id} className="bg-[#A0A3BD1A] text-[#A0A3BD] text-lg px-4 py-1 rounded-full">
+                  <span key={genre.id} className="bg-[#A0A3BD1A] text-[#A0A3BD] text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 rounded-full">
                     {genre.name}
                   </span>
                 ))}
               </div>
 
-              <div className="grid grid-cols-2 gap-8 mt-8">
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 mt-10">
                 <div>
-                  <p className="text-[#8692A6] text-lg">Release date</p>
-                  <p className="text-xl mt-1">{movie.release_date ? formatDate(movie.release_date) : 'N/A'}</p>
+                  <p className="text-[#8692A6] text-sm sm:text-base md:text-lg">Release date</p>
+                  <p className="text-base sm:text-lg md:text-xl mt-1">{movie.release_date ? formatDate(movie.release_date) : 'N/A'}</p>
                 </div>
                 
                 <div>
-                  <p className="text-[#8692A6] text-lg">Directed by</p>
-                  <p className="text-xl mt-1">
+                  <p className="text-[#8692A6] text-sm sm:text-base md:text-lg">Directed by</p>
+                  <p className="text-base sm:text-lg md:text-xl mt-1">
                     {credits?.crew?.find(person => person.job === 'Director')?.name || 'N/A'}
                   </p>
                 </div>
                 
                 <div>
-                  <p className="text-[#8692A6] text-lg">Duration</p>
-                  <p className="text-xl mt-1">{movie.runtime ? formatDuration(movie.runtime) : 'N/A'}</p>
+                  <p className="text-[#8692A6] text-sm sm:text-base md:text-lg">Duration</p>
+                  <p className="text-base sm:text-lg md:text-xl mt-1">{movie.runtime ? formatDuration(movie.runtime) : 'N/A'}</p>
                 </div>
                 
                 <div>
-                  <p className="text-[#8692A6] text-lg">Casts</p>
-                  <p className="text-xl mt-1">
+                  <p className="text-[#8692A6] text-sm sm:text-base md:text-lg">Casts</p>
+                  <p className="text-base sm:text-lg md:text-xl mt-1">
                     {credits?.cast?.slice(0, 3).map(actor => actor.name).join(', ') || 'N/A'}
                   </p>
                 </div>
@@ -136,29 +138,29 @@ function Details() {
             </div>
           </div>
 
-          <div className="mt-12 max-w-4xl">
-            <h2 className="text-2xl font-bold">Synopsis</h2>
-            <p className="mt-4 text-lg text-[#A0A3BD] leading-8">
+          <div className="mt-8 sm:mt-10 md:mt-12">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Synopsis</h2>
+            <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-[#A0A3BD] leading-6 sm:leading-7 md:leading-8">
               {movie.overview || 'No synopsis available.'}
             </p>
           </div>
         </section>
 
-        <section className="px-5 sm:px-10 md:px-15 lg:px-30 py-10">
-          <h2 className="text-3xl font-semibold">Book Tickets</h2>
+        <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 sm:py-8 md:py-10 bg-gray-50">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Book Tickets</h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-6 sm:mt-8">
             <div>
-              <label className="text-xl font-semibold block mb-3">Choose Date</label>
+              <label className="hidden text-base sm:text-lg md:text-xl font-semibold sm:block mb-2 sm:mb-3">Choose Date</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] h-13 rounded-lg pl-12 pr-5 text-lg outline-none appearance-none">
+                <select className="w-full bg-[#EFF0F6] h-11 sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
                   <option value="">Select Date</option>
                   <option value="">Today</option>
                   <option value="">Tomorrow</option>
                   <option value="">Next Week</option>
                 </select>
                 <svg 
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none"
+                  className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-600 pointer-events-none"
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -166,7 +168,7 @@ function Details() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
                 <svg 
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none"
+                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-gray-600 pointer-events-none"
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -176,10 +178,10 @@ function Details() {
               </div>
             </div>
 
-            <div>
-              <label className="text-xl font-semibold block mb-3">Choose Time</label>
+            <div className='hidden sm:block'>
+              <label className="text-base sm:text-lg md:text-xl font-semibold block mb-2 sm:mb-3">Choose Time</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] h-13 rounded-lg pl-12 pr-5 text-lg outline-none appearance-none">
+                <select className="w-full bg-[#EFF0F6] h-11 sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
                   <option value="">Select Time</option>
                   <option value="">08:30 AM</option>
                   <option value="">12:30 PM</option>
@@ -187,7 +189,7 @@ function Details() {
                   <option value="">07:30 PM</option>
                 </select>
                 <svg 
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none"
+                  className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-600 pointer-events-none"
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -195,7 +197,7 @@ function Details() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <svg 
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none"
+                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-gray-600 pointer-events-none"
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -206,9 +208,9 @@ function Details() {
             </div>
 
             <div>
-              <label className="text-xl font-semibold block mb-3">Choose Location</label>
+              <label className="hidden text-base sm:text-lg md:text-xl font-semibold sm:block mb-2 sm:mb-3">Choose Location</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] h-13 rounded-lg pl-12 pr-5 text-lg outline-none appearance-none">
+                <select className="w-full bg-[#EFF0F6] h-11 sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
                   <option value="">Select Location</option>
                   <option value="">Jakarta</option>
                   <option value="">Bandung</option>
@@ -216,7 +218,7 @@ function Details() {
                   <option value="">Bogor</option>
                 </select>
                 <svg 
-                  className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-600 pointer-events-none"
+                  className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-600 pointer-events-none"
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -225,7 +227,7 @@ function Details() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 <svg 
-                  className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none"
+                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-gray-600 pointer-events-none"
                   fill="none" 
                   stroke="currentColor" 
                   viewBox="0 0 24 24"
@@ -234,23 +236,25 @@ function Details() {
                 </svg>
               </div>
             </div>
-          <button className="bg-[#1D4ED8] hover:bg-[#1a45b8] mt-10 text-white w-full sm:w-auto px-12 h-13 rounded-lg transition-colors text-lg font-medium">
-            Filter
-          </button>
+            
+            <div className="flex items-end">
+              <button className="bg-[#1D4ED8] hover:bg-[#1a45b8] text-white w-full h-11 sm:h-12 md:h-13 rounded-lg transition-colors text-sm sm:text-base md:text-lg font-medium">
+                Filter
+              </button>
+            </div>
           </div>
-
         </section>
 
-        <section className="px-5 sm:px-10 md:px-15 lg:px-30 py-10">
-          <div className="flex items-center gap-4 mb-8">
-            <h2 className="text-xl font-semibold">Choose Cinema</h2>
-            <span className="text-xl text-[#8692A6]">39 Results</span>
+        <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 sm:py-8 md:py-10">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold">Choose Cinema</h2>
+            <span className="text-base sm:text-lg md:text-xl text-[#8692A6]">39 Results</span>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-5 mb-6 sm:mb-8">
             <div 
               onClick={() => handleCinemaClick(0)}
-              className={`flex items-center justify-center border-2 rounded-lg p-8 transition-colors cursor-pointer ${
+              className={`flex items-center justify-center border-2 rounded-lg p-4 sm:p-6 md:p-8 transition-colors cursor-pointer ${
                 selectedCinema === 0 
                   ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
                   : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
@@ -259,13 +263,13 @@ function Details() {
               <img 
                 src={EbvLogo} 
                 alt="EBV Cinema" 
-                className={`w-32 h-auto ${selectedCinema === 0 ? 'brightness-0 invert' : ''}`} 
+                className={`w-20 h-auto sm:w-24 md:w-28 lg:w-32 ${selectedCinema === 0 ? 'brightness-0 invert' : ''}`} 
               />
             </div>
             
             <div 
               onClick={() => handleCinemaClick(1)}
-              className={`flex items-center justify-center border-2 rounded-lg p-8 transition-colors cursor-pointer ${
+              className={`flex items-center justify-center border-2 rounded-lg p-4 sm:p-6 md:p-8 transition-colors cursor-pointer ${
                 selectedCinema === 1 
                   ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
                   : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
@@ -274,13 +278,13 @@ function Details() {
               <img 
                 src={HiflixLogo} 
                 alt="Hiflix Cinema" 
-                className={`w-32 h-auto ${selectedCinema === 1 ? 'brightness-0 invert' : ''}`} 
+                className={`w-20 h-auto sm:w-24 md:w-28 lg:w-32 ${selectedCinema === 1 ? 'brightness-0 invert' : ''}`} 
               />
             </div>
             
             <div 
               onClick={() => handleCinemaClick(2)}
-              className={`flex items-center justify-center border-2 rounded-lg p-8 transition-colors cursor-pointer ${
+              className={`flex items-center justify-center border-2 rounded-lg p-4 sm:p-6 md:p-8 transition-colors cursor-pointer ${
                 selectedCinema === 2 
                   ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
                   : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
@@ -289,13 +293,13 @@ function Details() {
               <img 
                 src={CineOneLogo} 
                 alt="CineOne Cinema" 
-                className={`w-32 h-auto ${selectedCinema === 2 ? 'brightness-0 invert' : ''}`} 
+                className={`w-20 h-auto sm:w-24 md:w-28 lg:w-32 ${selectedCinema === 2 ? 'brightness-0 invert' : ''}`} 
               />
             </div>
             
             <div 
               onClick={() => handleCinemaClick(3)}
-              className={`flex items-center justify-center border-2 rounded-lg p-8 transition-colors cursor-pointer ${
+              className={`flex items-center justify-center border-2 rounded-lg p-4 sm:p-6 md:p-8 transition-colors cursor-pointer ${
                 selectedCinema === 3 
                   ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
                   : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
@@ -304,30 +308,30 @@ function Details() {
               <img 
                 src={EbvLogo} 
                 alt="EBV Cinema" 
-                className={`w-32 h-auto ${selectedCinema === 3 ? 'brightness-0 invert' : ''}`} 
+                className={`w-20 h-auto sm:w-24 md:w-28 lg:w-32 ${selectedCinema === 3 ? 'brightness-0 invert' : ''}`} 
               />
             </div>
           </div>
 
-          <div className="flex justify-center gap-3 mb-8">
-            <button className="bg-[#1D4ED8] text-white w-10 h-10 rounded-lg flex justify-center items-center hover:bg-[#1a45b8] transition-colors">
+          <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
+            <button className="bg-[#1D4ED8] text-white w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex justify-center items-center hover:bg-[#1a45b8] transition-colors text-sm sm:text-base">
               1
             </button>
-            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-10 h-10 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors">
+            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm sm:text-base">
               2
             </button>
-            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-10 h-10 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors">
+            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm sm:text-base">
               3
             </button>
-            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-10 h-10 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors">
+            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm sm:text-base">
               4
             </button>
           </div>
 
-          <div className="text-center pb-10">
+          <div className="text-center pb-6 sm:pb-8 md:pb-10">
             <button 
               onClick={handleBookNow}
-              className="bg-[#1D4ED8] hover:bg-[#1a45b8] text-white px-16 py-4 rounded-lg transition-colors text-lg font-medium"
+              className="bg-[#1D4ED8] hover:bg-[#1a45b8] text-white px-8 sm:px-12 md:px-16 py-3 sm:py-4 rounded-lg transition-colors text-base sm:text-lg md:text-xl font-medium"
             >
               Book Now
             </button>

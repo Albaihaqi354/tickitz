@@ -1,31 +1,12 @@
-/* eslint-disable no-unreachable */
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-const validateEmail = (email) => {
-  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return re.test(email);
-};
-
-const validatePassword = (password) => {
-  const re = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
-  return re.test(password);
-};
-
-const getUsersFromLocalStorage = () => {
+const getRegisteredUsersFromStorage = () => {
   try {
     const users = localStorage.getItem("registeredUsers");
     return users ? JSON.parse(users) : [];
   } catch (error) {
-    console.error(error);
+    console.error("Error getting users from localStorage:", error);
     return [];
-  }
-};
-
-const saveUsersToLocalStorage = (users) => {
-  try {
-    localStorage.setItem("registeredUsers", JSON.stringify(users));
-  } catch (error) {
-    console.error(error);
   }
 };
 
@@ -37,12 +18,13 @@ export const loginUser = createAsyncThunk(
         throw new Error("Email dan password harus diisi");
       }
 
-      if (!validateEmail(email)) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
         throw new Error("Format email tidak valid");
       }
 
-      const registeredUsers = getUsersFromLocalStorage();
-
+      const registeredUsers = getRegisteredUsersFromStorage();
+      
       const user = registeredUsers.find(
         (u) => u.email === email && u.password === password
       );
@@ -60,53 +42,10 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-export const registerUser = createAsyncThunk(
-  "auth/register",
-  async ({ email, password }, { rejectWithValue }) => {
-    try {
-      if (!email || !password) {
-        throw new Error("Semua field harus diisi");
-      }
-
-      if (!validateEmail(email)) {
-        throw new Error("Format email tidak valid");
-      }
-
-      if (!validatePassword(password)) {
-        throw new Error(
-          "Password minimal 8 karakter dan harus mengandung setidaknya satu huruf dan satu angka."
-        );
-      }
-
-      const registeredUsers = getUsersFromLocalStorage();
-
-      const existingUser = registeredUsers.find((u) => u.email === email);
-      if (existingUser) {
-        throw new Error(
-          "Email ini sudah terdaftar. Silakan gunakan email lain."
-        );
-      }
-
-      const newUser = { email, password };
-      registeredUsers.push(newUser);
-      saveUsersToLocalStorage(registeredUsers);
-      return {
-        user: { email: newUser.email },
-      };
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
-);
-
 export const logoutUser = createAsyncThunk(
   "auth/logout",
-  async (_, { rejectWithValue }) => {
-    try {
-      return {};
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
+  async () => {
+    return {};
   }
 );
 
@@ -142,21 +81,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-
-      .addCase(registerUser.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(registerUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.isAuthenticated = true;
-      })
-      .addCase(registerUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-
+      
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
       })
@@ -165,10 +90,6 @@ const authSlice = createSlice({
         state.user = null;
         state.isAuthenticated = false;
         state.error = null;
-      })
-      .addCase(logoutUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
       });
   },
 });

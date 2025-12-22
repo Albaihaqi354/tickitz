@@ -4,8 +4,13 @@ import { tmdbFetch } from "../../api/tmdb";
 export const fetchNowPlaying = createAsyncThunk(
   "movie/fetchNowPlaying",
   async () => {
-    const data = await tmdbFetch("/movie/now_playing?language=en-US&page=1");
-    return data.results;
+    const promises = [1, 2, 3, 4].map(page => 
+      tmdbFetch(`/movie/now_playing?language=en-US&page=${page}`)
+    );
+    
+    const responses = await Promise.all(promises);
+    const allResults = responses.flatMap(response => response.results);    
+    return allResults;
   }
 );
 
@@ -27,7 +32,7 @@ export const fetchMovieDetail = createAsyncThunk(
 export const fetchMovieCredits = createAsyncThunk(
   "movie/fetchMovieCredits",
   async (id) => {
-    return await tmdbFetch(`/movies/${id}/credits?language=en-US`);
+    return await tmdbFetch(`/movie/${id}/credits?language=en-US`);
   }
 );
 

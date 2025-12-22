@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNowPlaying } from '../redux/slices/movie.slice';
+import { useNavigate } from 'react-router-dom';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Background from "../assets/image1.svg";
 import ArrowRightIcon from "../assets/arrow-right.svg";
 import FooterTop from "../components/FooterTop";
-import { useNavigate } from "react-router";
 
 function HomeView() {
   const navigate = useNavigate();
@@ -14,66 +14,61 @@ function HomeView() {
   
   const { nowPlaying, loading } = useSelector((state) => state.movie);
   
-  const [selectedGenre, setSelectedGenre] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [genre, setGenre] = useState(null);
 
   const TMDB_IMAGE_BASE = import.meta.env.VITE_TMDB_IMAGE_BASE;
 
   const genreList = {
-    28: "Action",
-    12: "Adventure",
-    16: "Animation",
-    35: "Comedy",
-    80: "Crime",
-    99: "Documentary",
-    18: "Drama",
-    10751: "Family",
-    14: "Fantasy",
-    36: "History",
-    27: "Horror",
-    10402: "Music",
-    9648: "Mystery",
-    10749: "Romance",
-    878: "Science Fiction",
-    10770: "TV Movie",
-    53: "Thriller",
-    10752: "War",
-    37: "Western",
+    28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy", 80: "Crime", 99: "Documentary",
+    18: "Drama", 10751: "Family", 14: "Fantasy", 36: "History", 27: "Horror", 10402: "Music",
+    9648: "Mystery", 10749: "Romance", 878: "Science Fiction", 10770: "TV Movie", 53: "Thriller",
+    10752: "War", 37: "Western",
   };
 
   useEffect(() => {
     dispatch(fetchNowPlaying());
   }, [dispatch]);
 
-  const movies = nowPlaying.slice(0, 12);
-
   const filteredMovies = useMemo(() => {
-    return movies
-      .filter((movie) => !selectedGenre || movie.genre_ids.includes(selectedGenre))
+    return nowPlaying
+      .filter((movie) => !genre || movie.genre_ids.includes(genre))
       .filter((movie) =>
-        movie.title.toLowerCase().includes(searchQuery.toLowerCase())
+        movie.title.toLowerCase().includes(search.toLowerCase())
       );
-  }, [selectedGenre, searchQuery, movies]);
+  }, [genre, search, nowPlaying]);
+
+  const ITEMS_PER_PAGE = 12;
+  const TOTAL_PAGES = 4;
+
+  const currentMovies = useMemo(() => {
+    const startIndex = (page - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return filteredMovies.slice(startIndex, endIndex);
+  }, [filteredMovies, page]);
 
   const handleGenreClick = (genreId) => {
-    setSelectedGenre(selectedGenre === genreId ? null : genreId);
+    setGenre(genreId === null ? null : parseInt(genreId));
+    setPage(1);
   };
 
   const handleSearchChange = (e) => {
-    setSearchQuery(e.target.value);
+    const newSearch = e.target.value;
+    setSearch(newSearch);
+    setPage(1);
   };
 
   const handleMovieClick = (movieId) => {
     navigate(`/movies/${movieId}`);
   };
 
-  const handlePageClick = (page) => {
-    setCurrentPage(page);
+  const handlePageClick = (pageToGo) => {
+    setPage(pageToGo);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  if (loading && movies.length === 0) {
+  if (loading && nowPlaying.length === 0) {
     return (
       <>
         <Header />
@@ -120,34 +115,39 @@ function HomeView() {
                 type="text"
                 placeholder="New Born Expert"
                 id="search-input"
-                value={searchQuery}
+                value={search}
                 onChange={handleSearchChange}
                 className="w-full lg:w-100 h-12 sm:h-14 md:h-16 lg:h-17 text-base sm:text-lg md:text-xl p-3 pr-11 border-2 border-gray-300 rounded-md focus:border-blue-700 focus:ring-4 focus:ring-blue-300 outline-none"
               />
             </div>
 
-            <div className="w-full lg:w-auto">
+            <div className="w-full lg:w-auto lg:flex-1 lg:max-w-3xl">
               <p className="text-base sm:text-lg md:text-xl text-[#4E4B66] mb-2">
                 Filter
               </p>
-              <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 lg:gap-8 mt-3 sm:mt-4 md:mt-5">
-                {[
-                  { id: 53, label: "Thriller" },
-                  { id: 27, label: "Horror" },
-                  { id: 10749, label: "Romantic" },
-                  { id: 12, label: "Adventure" },
-                  { id: 878, label: "Sci-Fi" },
-                ].map((g) => (
+              <div className="flex gap-2 sm:gap-3 md:gap-4 mt-3 sm:mt-4 md:mt-5 overflow-x-auto pb-2">
+                <button
+                  key="all"
+                  onClick={() => handleGenreClick(null)}
+                  className={`${
+                    !genre
+                      ? "bg-[#1D4ED8] text-white"
+                      : "text-[#4E4B66]"
+                  } text-sm sm:text-base md:text-lg p-2 px-3 sm:px-4 md:px-5 rounded-md hover:bg-[#1a45b8] hover:text-white transition whitespace-nowrap`}
+                >
+                  All
+                </button>
+                {Object.entries(genreList).map(([id, name]) => (
                   <button
-                    key={g.id}
-                    onClick={() => handleGenreClick(g.id)}
+                    key={id}
+                    onClick={() => handleGenreClick(parseInt(id))}
                     className={`${
-                      selectedGenre === g.id
+                      genre === parseInt(id)
                         ? "bg-[#1D4ED8] text-white"
                         : "text-[#4E4B66]"
-                    } text-sm sm:text-base md:text-lg p-2 px-3 sm:px-4 md:px-5 rounded-md hover:bg-[#1a45b8] hover:text-white transition`}
+                    } text-sm sm:text-base md:text-lg p-2 px-3 sm:px-4 md:px-5 rounded-md hover:bg-[#1a45b8] hover:text-white transition whitespace-nowrap`}
                   >
-                    {g.label}
+                    {name}
                   </button>
                 ))}
               </div>
@@ -155,8 +155,8 @@ function HomeView() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-8 sm:mt-10 gap-5 md:gap-6 lg:gap-7 mx-auto max-w-7xl">
-            {filteredMovies.length > 0 ? (
-              filteredMovies.map((movie) => (
+            {currentMovies.length > 0 ? (
+              currentMovies.map((movie) => (
                 <div key={movie.id} className="w-full">
                   <div
                     className="relative group cursor-pointer"
@@ -215,22 +215,27 @@ function HomeView() {
           </div>
 
           <div className="flex justify-center gap-3 sm:gap-4 md:gap-5 mt-8 sm:mt-10 pb-10">
-            {[1, 2, 3, 4].map((page) => (
+            {[1, 2, 3, 4].map((pageNum) => (
               <button
-                key={page}
-                onClick={() => handlePageClick(page)}
+                key={pageNum}
+                onClick={() => handlePageClick(pageNum)}
                 className={`${
-                  currentPage === page
+                  page === pageNum
                     ? 'bg-[#1D4ED8] text-white'
                     : 'bg-[#F9FAFB] text-[#A0A3BD]'
                 } w-8 h-8 sm:w-10 sm:h-10 rounded-full flex justify-center items-center cursor-pointer hover:bg-[#1a45b8] hover:text-white transition text-sm sm:text-base`}
               >
-                {page}
+                {pageNum}
               </button>
             ))}
             <button 
-              onClick={() => handlePageClick(Math.min(currentPage + 1, 4))}
-              className="bg-[#1D4ED8] w-8 h-8 sm:w-10 sm:h-10 rounded-full flex justify-center items-center cursor-pointer hover:bg-[#1a45b8] transition"
+              onClick={() => handlePageClick(Math.min(page + 1, TOTAL_PAGES))}
+              disabled={page === TOTAL_PAGES}
+              className={`${
+                page === TOTAL_PAGES
+                  ? 'bg-gray-300' 
+                  : 'bg-[#1D4ED8] hover:bg-[#1a45b8]'
+              } w-8 h-8 sm:w-10 cursor-pointer sm:h-10 rounded-full flex justify-center items-center transition`}
             >
               <img
                 src={ArrowRightIcon}

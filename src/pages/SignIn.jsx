@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import TickitzLogo from '../assets/Tickitz1.svg';
+import TickitzLogo from '../assets/tickitz1.svg';
 import Background from '../assets/image1.svg';
 import GoogleIcon from '../assets/google.svg';
 import FacebookIcon from '../assets/facebook.svg';
@@ -53,13 +53,19 @@ function SignIn() {
           setPassword("");
           navigate("/");
         })
-        .catch(() => {
+        .catch((err) => {
+          console.error("Login failed:", err);
         });
     }
   };
 
-  const passwordVisibility = () => {
+  const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleSocialLogin = (provider) => {
+    console.log(`Login with ${provider} clicked`);
+    navigate(`/auth/forgot-password`);
   };
 
   return (
@@ -120,7 +126,7 @@ function SignIn() {
                   />
                   <button
                     type="button"
-                    onClick={passwordVisibility}
+                    onClick={togglePasswordVisibility}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-blue-700"
                   >
                     {showPassword ? (
@@ -142,6 +148,7 @@ function SignIn() {
               <div className="w-full text-right mt-2 mb-4">
                 <button 
                   type="button"
+                  onClick={() => navigate('/auth/forgot-password')}
                   className="text-base font-semibold text-blue-700 hover:underline"
                 >
                   Forgot your password?
@@ -170,10 +177,16 @@ function SignIn() {
             </div>
 
             <div className="flex justify-center gap-4 pb-6">
-              <div className="bg-white p-4 rounded-md shadow-md cursor-pointer hover:-translate-y-1 transition">
+              <div 
+                className="bg-white p-4 rounded-md shadow-md cursor-pointer hover:-translate-y-1 transition"
+                onClick={() => handleSocialLogin('Google')}
+              >
                 <img src={GoogleIcon} alt="Google Login" className="w-6 h-6" />
               </div>
-              <div className="bg-white p-4 rounded-md shadow-md cursor-pointer hover:-translate-y-1 transition">
+              <div 
+                className="bg-white p-4 rounded-md shadow-md cursor-pointer hover:-translate-y-1 transition"
+                onClick={() => handleSocialLogin('Facebook')}
+              >
                 <img src={FacebookIcon} alt="Facebook Login" className="w-6 h-6" />
               </div>
             </div>
@@ -181,7 +194,7 @@ function SignIn() {
             <div className="text-center text-gray-600 mt-4">
               Don't have an account? 
               <button 
-                onClick={() => navigate('/signup')} 
+                onClick={() => navigate('/auth/signup')}
                 className="text-blue-700 hover:underline ml-1 font-medium"
               >
                 Sign Up

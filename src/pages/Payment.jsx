@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import GooglePay from "../assets/logos_google_pay.svg";
@@ -9,8 +10,50 @@ import Dana from "../assets/Logo_DANA.svg";
 import Bca from "../assets/Bank_BCA_Logo.svg";
 import Bri from "../assets/Bank_BRI_Logo.svg";
 import Ovo from "../assets/OVO.svg";
+import ModalPayment from "../components/ModalPayment";
 
 function Payment() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const orderData = location.state;
+
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [paymentData, setPaymentData] = useState(null);
+
+  useEffect(() => {
+    if (!orderData) {
+      navigate('/');
+    }
+  }, [orderData, navigate]);
+
+  const handlePayment = () => {
+    if (!fullName || !email || !phoneNumber || !selectedPaymentMethod) {
+      return;
+    }
+
+    const newPaymentData = {
+      ...orderData,
+      userInfo: { fullName, email, phoneNumber },
+      paymentMethod: selectedPaymentMethod,
+    };
+    
+    setPaymentData(newPaymentData);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
+
+  const handlePayLater = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <Header />
@@ -28,7 +71,7 @@ function Payment() {
               <div className="border-t-2 border-dashed border-gray-400 w-16 mb-6"></div>
 
               <div className="flex flex-col items-center">
-                <p className="w-12 h-12 flex items-center justify-center bg-gray-400 text-white rounded-full">
+                <p className="w-12 h-12 flex items-center justify-center bg-green-700 text-white rounded-full">
                   2
                 </p>
                 <p className="text-sm mt-1">Seat</p>
@@ -37,7 +80,7 @@ function Payment() {
               <div className="border-t-2 border-dashed border-gray-400 w-16 mb-6"></div>
 
               <div className="flex flex-col items-center">
-                <p className="w-12 h-12 flex items-center justify-center bg-gray-400 text-white rounded-full">
+                <p className="w-12 h-12 flex items-center justify-center bg-blue-700 text-white rounded-full">
                   3
                 </p>
                 <p className="text-sm mt-1">Payment</p>
@@ -55,7 +98,7 @@ function Payment() {
                     Date & Time
                   </label>
                   <p className="text-base font-semibold text-gray-700 mt-1">
-                    Tuesday, 07 July 2020 at 02:00pm
+                    {orderData.showDate} at {orderData.showTime}
                   </p>
                 </div>
                 <div className="border-t-2 border-[#E6E6E6] w-full"></div>
@@ -65,7 +108,7 @@ function Payment() {
                     Movie Title
                   </label>
                   <p className="text-base font-semibold text-gray-700 mt-1">
-                    Spider-Man: Homecoming
+                    {orderData.movie.title}
                   </p>
                 </div>
                 <div className="border-t-2 border-[#E6E6E6] w-full"></div>
@@ -85,7 +128,7 @@ function Payment() {
                     Number of Tickets
                   </label>
                   <p className="text-base font-semibold text-gray-700 mt-1">
-                    3 pieces
+                    {orderData.selectedSeats.length} pieces
                   </p>
                 </div>
                 <div className="border-t-2 border-[#E6E6E6] w-full"></div>
@@ -95,7 +138,7 @@ function Payment() {
                     Total Payment
                   </label>
                   <p className="text-xl font-bold text-[#1D4ED8] mt-1">
-                    $30.00
+                    ${orderData.totalPrice.toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -113,6 +156,8 @@ function Payment() {
                   </label>
                   <input
                     type="text"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
                     className="w-full px-4 py-3 border border-gray-200 rounded-md text-base
                     focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -124,6 +169,8 @@ function Payment() {
                   </label>
                   <input
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full px-4 py-3 border border-gray-200 rounded-md text-base
                     focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -136,12 +183,14 @@ function Payment() {
                   <div className="flex gap-2">
                     <input
                       type="text"
-                      className="w-20 px-3 py-3 border border-gray-200 rounded-md text-base text-center
-                      focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="+62"
+                      value="+62"
+                      readOnly
+                      className="w-20 px-3 py-3 border border-gray-200 rounded-md text-base text-center bg-gray-100"
                     />
                     <input
                       type="text"
+                      value={phoneNumber}
+                      onChange={(e) => setPhoneNumber(e.target.value)}
                       className="flex-1 px-4 py-3 border border-gray-200 rounded-md text-base
                       focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
@@ -154,46 +203,49 @@ function Payment() {
               <h2 className="text-2xl font-semibold mb-6">Payment Method</h2>
 
               <div className="grid grid-cols-4 gap-4">
-                <button className="border border-gray-200 rounded-lg h-20 p-4 hover:border-blue-500 transition-colors">
-                  <img src={GooglePay} alt="Google Pay" className="mx-auto"/>
-                </button>
-
-                <button className="border border-gray-200 rounded-lg h-20 p-4 hover:border-blue-500 transition-colors">
-                  <img src={Visa} alt="Visa" className="mx-auto" />
-                </button>
-
-                <button className="border border-gray-200 rounded-lg h-20 p-4 hover:border-blue-500 transition-colors">
-                  <img src={GoPay} alt="GoPay" className="mx-auto" />
-                </button>
-
-                <button className="border border-gray-200 rounded-lg p-4 h-20 hover:border-blue-500 transition-colors">
-                  <img src={Paypal} alt="Paypal" className="mx-auto" />
-                </button>
-
-                <button className="border border-gray-200 rounded-lg p-4 h-20 hover:border-blue-500 transition-colors">
-                  <img src={Dana} alt="Dana" className="mx-auto" />
-                </button>
-
-                <button className="border border-gray-200 rounded-lg p-4 h-20 hover:border-blue-500 transition-colors">
-                  <img src={Bca} alt="BCA" className="mx-auto" />
-                </button>
-
-                <button className="border border-gray-200 h-20 rounded-lg p-4 hover:border-blue-500 transition-colors">
-                  <img src={Bri} alt="BRI" className="mx-auto" />
-                </button>
-
-                <button className="border border-gray-200 h-20 rounded-lg p-4 hover:border-blue-500 transition-colors">
-                  <img src={Ovo} alt="OVO" className="mx-auto" />
-                </button>
+                {[
+                  { name: 'Google Pay', logo: GooglePay },
+                  { name: 'Visa', logo: Visa },
+                  { name: 'GoPay', logo: GoPay },
+                  { name: 'Paypal', logo: Paypal },
+                  { name: 'Dana', logo: Dana },
+                  { name: 'BCA', logo: Bca },
+                  { name: 'BRI', logo: Bri },
+                  { name: 'OVO', logo: Ovo },
+                ].map((method) => (
+                  <button
+                    key={method.name}
+                    onClick={() => setSelectedPaymentMethod(method.name)}
+                    className={`border rounded-lg h-20 p-4 transition-colors ${
+                      selectedPaymentMethod === method.name
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-blue-500'
+                    }`}
+                  >
+                    <img src={method.logo} alt={method.name} className="mx-auto" />
+                  </button>
+                ))}
               </div>
             </div>
 
-            <button className="w-full bg-[#1D4ED8]  text-white text-lg font-semibold py-4 rounded-md">
+            <button 
+              onClick={handlePayment}
+              className="w-full bg-[#1D4ED8] text-white text-lg font-semibold py-4 rounded-md hover:bg-[#1a45b8] transition"
+            >
               Pay your order
             </button>
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <ModalPayment 
+          paymentData={paymentData}
+          onClose={handleCloseModal}
+          onPayLater={handlePayLater}
+          movieId={id} 
+        />
+      )}
 
       <Footer />
     </>
