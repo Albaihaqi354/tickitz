@@ -5,6 +5,7 @@ import Footer from "../components/Footer";
 import Background from "../assets/image1.svg";
 import TickitzLogo from "../assets/tickitz1.svg";
 import QrCode from "../assets/QR_Code.svg";
+import ButtonScrollToTop from "../components/ButtonScrolToTop";
 
 function TicketResult() {
   const location = useLocation();
