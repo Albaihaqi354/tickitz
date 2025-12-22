@@ -3,6 +3,7 @@ import HeaderAdmin from "../components/HeaderAdmin";
 import Eye from "../assets/Eye.svg"
 import Edit from "../assets/Edit.svg"
 import Delete from "../assets/Delete.svg"
+import ButtonScrollToTop from "../components/ButtonScrolToTop";
 
 function MovieAdmin() {
   return (
@@ -93,6 +94,7 @@ function MovieAdmin() {
           </div>
         </section>
       </main>
+      <ButtonScrollToTop/>
     </>
   );
 }

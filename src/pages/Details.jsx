@@ -7,6 +7,7 @@ import Header from '../components/Header';
 import EbvLogo from '../assets/ebv.svg';
 import CineOneLogo from '../assets/CineOne21.svg';
 import HiflixLogo from '../assets/hiflix.svg';
+import ButtonScrollToTop from '../components/ButtonScrolToTop';
 
 function Details() {
   const { id } = useParams();
@@ -338,7 +339,8 @@ function Details() {
           </div>
         </section>
       </main>
-
+      
+      <ButtonScrollToTop/>
       <Footer />
     </>
   );

@@ -145,7 +145,8 @@ function TicketResult() {
           </div>
         </section>
       </section>
-
+      
+      <ButtonScrollToTop/>
       <Footer />
     </>
   );

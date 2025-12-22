@@ -3,6 +3,7 @@ import Header from '../components/Header'
 import OrderHistory from '../components/OrderHistory'
 import SalesChart from '../components/SalesChart'
 import HeaderAdmin from '../components/HeaderAdmin'
+import ButtonScrollToTop from '../components/ButtonScrolToTop'
 
 function DashboardAdmin() {
   return (
@@ -56,6 +57,8 @@ function DashboardAdmin() {
                 <SalesChart/>
             </section>
         </main>
+
+        <ButtonScrollToTop/>
     </>
   )
 }

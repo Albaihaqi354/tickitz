@@ -5,6 +5,7 @@ import { fetchMovieDetail } from '../redux/slices/movie.slice';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import CineOneLogo from '../assets/CineOne21.svg';
+import ButtonScrollToTop from '../components/ButtonScrolToTop';
 
 function Order() {
   const { id } = useParams();
@@ -180,6 +181,7 @@ function Order() {
         </section>
       </main>
       <Footer />
+      <ButtonScrollToTop/>
     </>
   );
 }

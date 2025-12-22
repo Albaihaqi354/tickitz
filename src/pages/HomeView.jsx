@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import Background from "../assets/image1.svg";
 import ArrowRightIcon from "../assets/arrow-right.svg";
 import FooterTop from "../components/FooterTop";
+import ButtonScrollToTop from "../components/ButtonScrolToTop";
 
 function HomeView() {
   const navigate = useNavigate();
@@ -246,7 +247,8 @@ function HomeView() {
           </div>
         </section>
       </main>
-
+      
+      <ButtonScrollToTop/>
       <FooterTop />
       <Footer />
     </>

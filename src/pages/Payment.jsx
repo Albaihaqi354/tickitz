@@ -248,6 +248,7 @@ function Payment() {
       )}
 
       <Footer />
+      <ButtonScrollToTop/>
     </>
   );
 }

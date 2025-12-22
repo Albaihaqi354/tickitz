@@ -9,6 +9,7 @@ import BubbleIcon from '../assets/bubble.svg';
 import ArrowUpIcon from '../assets/arrow-up.svg';
 import ArrowLeftIcon from "../assets/arrow-left.svg";
 import ArrowRightIcon from "../assets/arrow-right.svg";
+import ButtonScrollToTop from '../components/ButtonScrolToTop';
 
 function Home() {
   const navigate = useNavigate();
@@ -318,6 +319,7 @@ function Home() {
           </div>
         </section>
       </main>
+      <ButtonScrollToTop/>
     </>
   );
 }

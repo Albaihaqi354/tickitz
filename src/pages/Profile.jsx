@@ -169,6 +169,7 @@ function Profile() {
           )}
         </section>
       </main>
+      <ButtonScrollToTop/>
     </>
   );
 }
