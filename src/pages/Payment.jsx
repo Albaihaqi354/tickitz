@@ -11,6 +11,7 @@ import Bca from "../assets/Bank_BCA_Logo.svg";
 import Bri from "../assets/Bank_BRI_Logo.svg";
 import Ovo from "../assets/OVO.svg";
 import ModalPayment from "../components/ModalPayment";
+import ButtonScrollToTop from "../components/ButtonScrolToTop";
 
 function Payment() {
   const location = useLocation();
@@ -247,8 +248,8 @@ function Payment() {
         />
       )}
 
-      <Footer />
       <ButtonScrollToTop/>
+      <Footer />
     </>
   );
 }
