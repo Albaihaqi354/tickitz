@@ -16,7 +16,7 @@ function Details() {
   
   const { detail: movie, credits, loading } = useSelector((state) => state.movie);
   
-  const [selectedCinema, setSelectedCinema] = useState(1);
+  const [selectedCinema, setSelectedCinema] = useState(null);
   
   const TMDB_IMAGE_BASE = import.meta.env.VITE_TMDB_IMAGE_BASE;
   const backdropBase = "https://image.tmdb.org/t/p/original";
