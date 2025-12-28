@@ -3,8 +3,7 @@ import Star from "../assets/star.svg";
 import { useState } from "react";
 
 function Profile() {
-    // Gunakan satu state untuk melacak tab yang aktif
-    const [activeTab, setActiveTab] = useState("account"); // "account" atau "order"
+    const [activeTab, setActiveTab] = useState("account");
 
     return (
     <>
