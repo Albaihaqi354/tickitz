@@ -96,7 +96,7 @@ function Home() {
               <p className='text-[#1D4ED8] font-bold text-base sm:text-lg md:text-xl mb-3'>
                 MOVIE TICKET PURCHASES #1 IN INDONESIA
               </p>
-              <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4'>
+              <h1 className='text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight mb-4'>
                 Experience the Magic of Cinema: Book Your Tickets Today
               </h1>
               <p className='text-base sm:text-lg md:text-xl text-[#A0A3BD]'>
