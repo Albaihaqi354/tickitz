@@ -135,7 +135,7 @@ function Home() {
             <p className='text-lg md:text-xl text-[#1D4ED8] font-semibold mb-3'>
               WHY CHOOSE US
             </p>
-            <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold'>
+            <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl'>
               Unleashing the Ultimate Movie Experience
             </h2>
           </div>
@@ -177,7 +177,7 @@ function Home() {
         <section className='mt-16 sm:mt-20 md:mt-24'>
           <div className='text-center px-4 mb-10'>
             <p className='text-[#1D4ED8] text-lg md:text-xl font-bold mb-3'>MOVIES</p>
-            <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold max-w-3xl mx-auto'>
+            <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl max-w-3xl mx-auto'>
               Exciting Movies That Should Be Watched Today
             </h2>
           </div>
@@ -268,7 +268,7 @@ function Home() {
           <div className='flex flex-col sm:flex-row justify-between items-center gap-4 mb-10'>
             <div className='text-center sm:text-left'>
               <p className='text-[#1D4ED8] font-bold text-base md:text-lg'>UPCOMING MOVIES</p>
-              <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mt-2'>
+              <h2 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl mt-2'>
                 Exciting Movie Coming Soon
               </h2>
             </div>
