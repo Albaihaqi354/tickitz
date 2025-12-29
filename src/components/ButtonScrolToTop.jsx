@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 function ButtonScrollToTop() {
-  // State untuk mengontrol visibilitas tombol
   const [isVisible, setIsVisible] = useState(false);
 
-  // Fungsi untuk menampilkan atau menyembunyikan tombol berdasarkan posisi scroll
   const toggleVisibility = () => {
     if (window.pageYOffset > 300) {
       setIsVisible(true);
@@ -13,7 +11,6 @@ function ButtonScrollToTop() {
     }
   };
 
-  // Fungsi untuk scroll ke atas
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,

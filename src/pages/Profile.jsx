@@ -1,5 +1,6 @@
 import OrderHistory from "../components/OrderHistory";
 import Star from "../assets/star.svg";
+import ButtonScrollToTop from "../components/ButtonScrolToTop";
 import { useState } from "react";
 
 function Profile() {
