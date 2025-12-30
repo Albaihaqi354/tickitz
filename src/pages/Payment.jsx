@@ -220,7 +220,7 @@ function Payment() {
                     className={`border rounded-lg h-20 p-4 transition-colors ${
                       selectedPaymentMethod === method.name
                         ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-blue-500'
+                        : 'border-gray-200 hover:border-blue-500 cursor-pointer'
                     }`}
                   >
                     <img src={method.logo} alt={method.name} className="mx-auto" />
@@ -231,7 +231,7 @@ function Payment() {
 
             <button 
               onClick={handlePayment}
-              className="w-full bg-[#1D4ED8] text-white text-lg font-semibold py-4 rounded-md hover:bg-[#1a45b8] transition"
+              className="w-full bg-[#1D4ED8] text-white cursor-pointer text-lg font-semibold py-4 rounded-md hover:bg-[#1a45b8] transition"
             >
               Pay your order
             </button>

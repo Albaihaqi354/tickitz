@@ -141,7 +141,7 @@ function Order() {
                   </div>
                   <div className='flex flex-col sm:flex-row justify-between mt-3 gap-2'>
                     <p className='font-semibold text-sm sm:text-base'>Regular - {showTime} PM</p>
-                    <button className='bg-[#1D4ED8] text-white p-1 pr-3 pl-3 rounded-md hover:bg-[#1a45b8] transition text-sm sm:text-base'>Change</button>
+                    <button className='bg-[#1D4ED8] text-white p-1 pr-3 pl-3 cursor-pointer rounded-md hover:bg-[#1a45b8] transition text-sm sm:text-base'>Change</button>
                   </div>
                 </div>
               </div>
@@ -175,7 +175,7 @@ function Order() {
               <div className='flex justify-between pl-10 pr-10 pb-5'><p className='text-xl font-bold'>Total Payment</p><p className='text-2xl font-bold text-[#1D4ED8]'>${selectedSeats.length * ticketPrice}</p></div>
             </article>
             <article className='mt-10 mb-10 w-full lg:w-auto'>
-              <button className='bg-[#1D4ED8] p-4 sm:p-5 px-16 sm:px-35 rounded-lg text-white text-lg sm:text-xl hover:bg-[#1a45b8] transition w-full lg:w-auto' disabled={selectedSeats.length === 0} onClick={handleCheckout}>Checkout now</button>
+              <button className='bg-[#1D4ED8] p-4 sm:p-5 px-16 cursor-pointer sm:px-35 rounded-lg text-white text-lg sm:text-xl hover:bg-[#1a45b8] transition w-full lg:w-auto' disabled={selectedSeats.length === 0} onClick={handleCheckout}>Checkout now</button>
             </article>
           </section>
         </section>

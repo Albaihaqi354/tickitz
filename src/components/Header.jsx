@@ -112,7 +112,7 @@ function Header() {
                 <p className="text-gray-800 text-center">{user.email}</p>
                 <button
                   onClick={handleLogout}
-                  className="text-lg text-white bg-red-600 rounded-[5px] py-3 px-6 text-center w-full hover:bg-red-700 transition-colors"
+                  className="text-lg text-white cursor-pointer bg-red-600 rounded-[5px] py-3 px-6 text-center w-full hover:bg-red-700 transition-colors"
                 >
                   Logout
                 </button>

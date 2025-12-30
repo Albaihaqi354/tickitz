@@ -154,7 +154,7 @@ function Details() {
             <div>
               <label className="hidden text-base sm:text-lg md:text-xl font-semibold sm:block mb-2 sm:mb-3">Choose Date</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] h-11 sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
+                <select className="w-full bg-[#EFF0F6] cursor-pointer h-11 sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
                   <option value="">Select Date</option>
                   <option value="">Today</option>
                   <option value="">Tomorrow</option>
@@ -182,7 +182,7 @@ function Details() {
             <div className='hidden sm:block'>
               <label className="text-base sm:text-lg md:text-xl font-semibold block mb-2 sm:mb-3">Choose Time</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] h-11 sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
+                <select className="w-full bg-[#EFF0F6] cursor-pointer h-11 sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
                   <option value="">Select Time</option>
                   <option value="">08:30 AM</option>
                   <option value="">12:30 PM</option>
@@ -211,7 +211,7 @@ function Details() {
             <div>
               <label className="hidden text-base sm:text-lg md:text-xl font-semibold sm:block mb-2 sm:mb-3">Choose Location</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] h-11 sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
+                <select className="w-full bg-[#EFF0F6] h-11 cursor-pointer sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
                   <option value="">Select Location</option>
                   <option value="">Jakarta</option>
                   <option value="">Bandung</option>
@@ -239,7 +239,7 @@ function Details() {
             </div>
             
             <div className="flex items-end">
-              <button className="bg-[#1D4ED8] hover:bg-[#1a45b8] text-white w-full h-11 sm:h-12 md:h-13 rounded-lg transition-colors text-sm sm:text-base md:text-lg font-medium">
+              <button className="bg-[#1D4ED8] hover:bg-[#1a45b8] cursor-pointer text-white w-full h-11 sm:h-12 md:h-13 rounded-lg transition-colors text-sm sm:text-base md:text-lg font-medium">
                 Filter
               </button>
             </div>
@@ -332,7 +332,7 @@ function Details() {
           <div className="text-center pb-6 sm:pb-8 md:pb-10">
             <button 
               onClick={handleBookNow}
-              className="bg-[#1D4ED8] hover:bg-[#1a45b8] text-white px-8 sm:px-12 md:px-16 py-3 sm:py-4 rounded-lg transition-colors text-base sm:text-lg md:text-xl font-medium"
+              className="bg-[#1D4ED8] cursor-pointer hover:bg-[#1a45b8] text-white px-8 sm:px-12 md:px-16 py-3 sm:py-4 rounded-lg transition-colors text-base sm:text-lg md:text-xl font-medium"
             >
               Book Now
             </button>

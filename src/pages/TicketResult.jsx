@@ -133,13 +133,13 @@ function TicketResult() {
           <div className="flex flex-col w-full max-w-[360px] no-print mt-7 mb-10">
             <button 
               onClick={handlePrint}
-              className="border border-[#1D4ED8] rounded-lg text-[#1D4ED8] text-xl font-bold p-4 hover:bg-gray-100 transition"
+              className="border border-[#1D4ED8] cursor-pointer rounded-lg text-[#1D4ED8] text-xl font-bold p-4 hover:bg-gray-100 transition"
             >
               Download
             </button>
             <button 
               onClick={() => navigate('/')}
-              className="mt-5 bg-[#1D4ED8] rounded-lg text-white text-xl font-bold p-4 hover:bg-[#1a45b8] transition"
+              className="mt-5 bg-[#1D4ED8] cursor-pointer rounded-lg text-white text-xl font-bold p-4 hover:bg-[#1a45b8] transition"
             >
               Done
             </button>

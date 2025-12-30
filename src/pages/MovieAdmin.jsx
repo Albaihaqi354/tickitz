@@ -13,7 +13,7 @@ function MovieAdmin() {
           <article className="flex justify-between items-center">
             <p className="text-3xl font-bold">List Movie</p>
             <div className="flex gap-5">
-              <select className="bg-[#EFF0F6] text-xl p-4 pl-15 pr-15 rounded-lg">
+              <select className="bg-[#EFF0F6] cursor-pointer text-xl p-4 pl-15 pr-15 rounded-lg">
                 <option>Januari 2025</option>
                 <option>Februari 2025</option>
                 <option>Maret 2025</option>

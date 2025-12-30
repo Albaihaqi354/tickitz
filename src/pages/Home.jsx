@@ -258,7 +258,7 @@ function Home() {
             onClick={() => navigate('/movies')} 
             className='hidden md:flex gap-2 justify-center items-center mx-auto mt-10 hover:opacity-80 transition'
           >
-            <span className='text-[#1D4ED8] text-xl font-bold'>View All</span>
+            <span className='text-[#1D4ED8] cursor-pointer text-xl font-bold'>View All</span>
             <img src={ArrowUpIcon} alt="Arrow Up" className="w-8" />
           </button>
         </section>

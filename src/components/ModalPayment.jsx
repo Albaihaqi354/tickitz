@@ -35,7 +35,7 @@ function ModalPayment({ paymentData, onClose, onPayLater, movieId }) {
               <div className="flex gap-4 items-center">
                 <p className="font-bold">12321328913829724</p>
                 <button 
-                  className="border text-xl border-solid border-[#1D4ED8] text-[#1D4ED8] p-2 rounded-lg"
+                  className="border text-xl border-solid cursor-pointer border-[#1D4ED8] text-[#1D4ED8] p-2 rounded-lg"
                 >
                   Copy
                 </button>
@@ -55,14 +55,14 @@ function ModalPayment({ paymentData, onClose, onPayLater, movieId }) {
             
             <button 
               onClick={handleCheckPayment}
-              className="w-full bg-[#1D4ED8] font-bold rounded-lg text-white p-4 mb-5"
+              className="w-full bg-[#1D4ED8] font-bold cursor-pointer rounded-lg text-white p-4 mb-5"
             >
               Check Payment
             </button>
             
             <button 
               onClick={onPayLater}
-              className="w-full font-bold rounded-lg text-[#1D4ED8] p-4 mb-5"
+              className="w-full font-bold cursor-pointer rounded-lg text-[#1D4ED8] p-4 mb-5"
             >
               Pay Later
             </button>
