@@ -30,13 +30,13 @@ function Header() {
   const isLoggedIn = !!user;
 
   return (
-    <header className="pt-6 pb-3 px-5 sm:px-10 md:px-20 lg:px-30">
+    <header className="py-4 px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
       <div className="flex justify-between items-center">
         <Link to="/">
-          <img src={TickitzLogo} className="w-28 sm:w-32 md:w-35 lg:w-45 z-50" />
+          <img src={TickitzLogo} className="w-28 sm:w-32 md:w-36 lg:w-40 xl:w-44 z-50" alt="Tickitz Logo" />
         </Link>
 
-        <ul className="hidden lg:flex gap-10 xl:gap-15 text-[18px] lg:text-[20px]">
+        <ul className="hidden lg:flex gap-8 xl:gap-12 text-base lg:text-lg">
           <li><Link to="/" className="hover:text-[#1D4ED8]">Home</Link></li>
           <li><Link to="/movies" className="hover:text-[#1D4ED8]">Movie</Link></li>
           <li><Link to="/movies/payment" className="hover:text-[#1D4ED8]">Buy Ticket</Link></li>

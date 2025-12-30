@@ -14,9 +14,9 @@ import YoutubeIcon from '../assets/youtube.svg';
 function Footer() {
   return (
     <>
-      <footer className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pb-12 md:pb-16 lg:pb-18 mt-20 md:mt-25 lg:mt-30 px-5 sm:px-10 md:px-20 lg:px-30'>
+      <footer className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 pb-12 md:pb-16 lg:pb-18 mt-20 md:mt-25 lg:mt-30 px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24'>
         <div className='sm:col-span-2 lg:col-span-1'>
-          <img src={TickitzLogo} alt="Logo Tickitz" className="w-32 md:w-35 lg:w-40 xl:w-50 mb-4 md:mb-5" />
+          <img src={TickitzLogo} alt="Logo Tickitz" className="w-32 md:w-36 lg:w-40 xl:w-44 mb-4 md:mb-5" />
           <p className='text-base md:text-[18px] text-[#6E7191] leading-relaxed'>
             Stop waiting in line. Buy tickets conveniently, watch movies quietly.
           </p>
@@ -35,9 +35,9 @@ function Footer() {
         <div>
           <p className='text-base md:text-[18px] font-bold mb-4 md:mb-5 text-gray-900'>Our Sponsor</p>
           <div className='flex flex-row lg:flex-col gap-6 md:gap-8 flex-wrap md:flexl-col'>
-            <img src={EbvLogo} alt="EBV Logo" className="w-20 md:w-32 lg:w-35 h-auto" />
-            <img src={CineOneLogo} alt="CineOne Logo" className="w-32 md:w-36 lg:w-40 xl:w-45 h-auto" />
-            <img src={HiflixLogo} alt="Hiflix Logo" className="w-20 md:w-22 lg:w-25 h-auto" />
+            <img src={EbvLogo} alt="EBV Logo" className="w-20 md:w-32 lg:w-36 h-auto" />
+            <img src={CineOneLogo} alt="CineOne Logo" className="w-32 md:w-36 lg:w-40 xl:w-44 h-auto" />
+            <img src={HiflixLogo} alt="Hiflix Logo" className="w-20 md:w-24 lg:w-28 h-auto" />
           </div>
         </div>
 

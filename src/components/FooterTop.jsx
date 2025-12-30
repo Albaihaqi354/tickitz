@@ -71,17 +71,17 @@ function FooterTop() {
 
   return (
     <>
-      <div className="relative flex justify-center mt-10 px-5 sm:px-10">
+      <div className="relative flex justify-center mt-10 px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
         <div className="bg-[#2563EB] w-full h-130 sm:h-100 max-w-7xl rounded-lg relative overflow-hidden">
           <div className="absolute bottom-0 right-0 w-55 h-45 border-7 sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-60 lg:h-60 sm:border-6 md:border-8 border-white rounded-full translate-x-1/2 translate-y-1/2"></div>
 
-          <div className="text-center mb-11 mt-18 sm:mt-12 md:mt-16 lg:mt-20 px-5 sm:px-10">
+          <div className="text-center mb-11 mt-18 sm:mt-12 md:mt-16 lg:mt-20 px-4 sm:px-6 md:px-10">
             <p className="text-4xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl text-amber-50 leading-tight">
               Subscribe to our newsletter
             </p>
           </div>
 
-          <form className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 md:gap-5 mt-8 sm:mt-10 md:mt-12 lg:mt-15 mb-12 sm:mb-16 md:mb-20 lg:mb-25 px-5 sm:px-10" onSubmit={handleSubmit}>
+          <form className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 md:gap-5 mt-8 sm:mt-10 md:mt-12 lg:mt-15 mb-12 sm:mb-16 md:mb-20 lg:mb-25 px-4 sm:px-6 md:px-10" onSubmit={handleSubmit}>
             <div className="relative w-70 sm:w-auto">
               <input
                 type="text"
