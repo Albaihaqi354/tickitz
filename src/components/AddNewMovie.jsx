@@ -10,7 +10,7 @@ function AddNewMovie() {
             <p className='text-2xl font-bold'>Add New Movie</p>
             <div className='mt-10 flex flex-col'>
                <label className='text-[#696F79] text-lg'>Upload Image</label>
-               <button className='bg-[#1D4ED8] p-2 w-30 rounded-sm text-white mt-3'>Upload</button>
+               <button className='bg-[#1D4ED8] p-2 w-30 cursor-pointer rounded-sm text-white mt-3'>Upload</button>
             </div>
 
             <div className='mt-7 flex flex-col gap-3'>
@@ -59,11 +59,11 @@ function AddNewMovie() {
             
             <div className='mt-7 flex flex-col gap-3'>
                 <label className='text-[#696F79] text-lg'>Set Date</label>
-                <select name="" id="" className='bg-[#EFF0F6] text-lg text-[#4E4B66] font-semibold p-3 w-50'>
+                <select name="" id="" className='bg-[#EFF0F6] cursor-pointer rounded-lg text-lg text-[#4E4B66] font-semibold p-3 w-50'>
                     <option value="">Set a Date</option>
                 </select>
                 <div className='pt-5 flex items-center gap-8'>
-                    <button className='p-1 pl-5 pr-5 rounded-lg border-2 border-[#5F2EEA]'>
+                    <button className='p-1 pl-5 pr-5 rounded-lg border-2 cursor-pointer border-[#5F2EEA]'>
                         <img src={Plus} alt="" />
                     </button>
                     <div className='flex gap-3'>
@@ -73,8 +73,7 @@ function AddNewMovie() {
                 </div>
             </div>
 
-            <label className='border w-full mt-10 border-[#DEDEDE] '></label>
-            <button className='bg-[#1D4ED8] text-xl font-semibold p-5 rounded-lg text-white'>
+            <button className='bg-[#1D4ED8] text-xl mt-10 font-semibold p-5 rounded-lg text-white cursor-pointer'>
                 Save Movie
             </button>
           </div>
