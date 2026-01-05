@@ -90,48 +90,48 @@ function Details() {
           <div className="absolute inset-0 bg-linear-to-t from-black via-black/50 to-transparent md:bg-linear-to-r md:from-black md:via-black/70 md:to-transparent" />
         </section>
 
-        <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 sm:py-8 md:py-10 -mt-70 lg:-mt-60 relative z-10">
-          <div className="flex flex-col lg:flex-row gap-6 md:gap-8">
+        <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-4 sm:py-6 md:py-8 -mt-40 sm:-mt-48 lg:-mt-40 relative z-10">
+          <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
             <div className='flex justify-center lg:justify-start'>
               <img 
                 src={movie.poster_path ? TMDB_IMAGE_BASE + movie.poster_path : 'https://via.placeholder.com/400x600?text=No+Image'} 
                 alt={movie.title}
-                className="w-80 lg:w-72 xl:w-80 h-auto rounded-xl object-cover shadow-lg"
+                className="w-48 sm:w-56 md:w-64 lg:w-56 xl:w-64 h-auto rounded-xl object-cover shadow-lg"
               />
             </div>
 
-            <div className="flex-1 mt-4 lg:mt-60">
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold text-center lg:text-left">{movie.title}</h1>
+            <div className="flex-1 mt-2 lg:mt-32">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-center lg:text-left">{movie.title}</h1>
               
-              <div className="flex flex-wrap gap-2 sm:gap-3 mt-3 sm:mt-4 justify-center lg:justify-start">
+              <div className="flex flex-wrap gap-2 mt-2 sm:mt-3 justify-center lg:justify-start">
                 {movie.genres && movie.genres.slice(0, 3).map(genre => (
-                  <span key={genre.id} className="bg-[#A0A3BD1A] text-[#A0A3BD] text-sm sm:text-base md:text-lg px-3 sm:px-4 py-1 rounded-full">
+                  <span key={genre.id} className="bg-[#A0A3BD1A] text-[#A0A3BD] text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full">
                     {genre.name}
                   </span>
                 ))}
               </div>
 
-              <div className="grid grid-cols-2 gap-4 sm:gap-6 mt-10">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-6 sm:mt-8">
                 <div>
-                  <p className="text-[#8692A6] text-sm sm:text-base md:text-lg">Release date</p>
-                  <p className="text-base sm:text-lg md:text-xl mt-1">{movie.release_date ? formatDate(movie.release_date) : 'N/A'}</p>
+                  <p className="text-[#8692A6] text-xs sm:text-sm">Release date</p>
+                  <p className="text-sm sm:text-base mt-1">{movie.release_date ? formatDate(movie.release_date) : 'N/A'}</p>
                 </div>
                 
                 <div>
-                  <p className="text-[#8692A6] text-sm sm:text-base md:text-lg">Directed by</p>
-                  <p className="text-base sm:text-lg md:text-xl mt-1">
+                  <p className="text-[#8692A6] text-xs sm:text-sm">Directed by</p>
+                  <p className="text-sm sm:text-base mt-1">
                     {credits?.crew?.find(person => person.job === 'Director')?.name || 'N/A'}
                   </p>
                 </div>
                 
                 <div>
-                  <p className="text-[#8692A6] text-sm sm:text-base md:text-lg">Duration</p>
-                  <p className="text-base sm:text-lg md:text-xl mt-1">{movie.runtime ? formatDuration(movie.runtime) : 'N/A'}</p>
+                  <p className="text-[#8692A6] text-xs sm:text-sm">Duration</p>
+                  <p className="text-sm sm:text-base mt-1">{movie.runtime ? formatDuration(movie.runtime) : 'N/A'}</p>
                 </div>
                 
                 <div>
-                  <p className="text-[#8692A6] text-sm sm:text-base md:text-lg">Casts</p>
-                  <p className="text-base sm:text-lg md:text-xl mt-1">
+                  <p className="text-[#8692A6] text-xs sm:text-sm">Casts</p>
+                  <p className="text-sm sm:text-base mt-1">
                     {credits?.cast?.slice(0, 3).map(actor => actor.name).join(', ') || 'N/A'}
                   </p>
                 </div>
@@ -139,22 +139,22 @@ function Details() {
             </div>
           </div>
 
-          <div className="mt-8 sm:mt-10 md:mt-12">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Synopsis</h2>
-            <p className="mt-3 sm:mt-4 text-sm sm:text-base md:text-lg text-[#A0A3BD] leading-6 sm:leading-7 md:leading-8">
+          <div className="mt-6 sm:mt-8">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold">Synopsis</h2>
+            <p className="mt-2 sm:mt-3 text-sm sm:text-base text-[#A0A3BD] leading-6 sm:leading-7">
               {movie.overview || 'No synopsis available.'}
             </p>
           </div>
         </section>
 
-        <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 sm:py-8 md:py-10 bg-gray-50">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Book Tickets</h2>
+        <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-4 sm:py-6 md:py-8 bg-gray-50">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-semibold">Book Tickets</h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mt-6 sm:mt-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-4 sm:mt-6">
             <div>
-              <label className="hidden text-base sm:text-lg md:text-xl font-semibold sm:block mb-2 sm:mb-3">Choose Date</label>
+              <label className="hidden text-sm sm:text-base font-semibold sm:block mb-2">Choose Date</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] cursor-pointer h-11 sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
+                <select className="w-full bg-[#EFF0F6] cursor-pointer h-10 sm:h-11 rounded-lg pl-9 sm:pl-10 pr-4 text-sm sm:text-base outline-none appearance-none">
                   <option value="">Select Date</option>
                   <option value="">Today</option>
                   <option value="">Tomorrow</option>
@@ -180,9 +180,9 @@ function Details() {
             </div>
 
             <div className='hidden sm:block'>
-              <label className="text-base sm:text-lg md:text-xl font-semibold block mb-2 sm:mb-3">Choose Time</label>
+              <label className="text-sm sm:text-base font-semibold block mb-2">Choose Time</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] cursor-pointer h-11 sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
+                <select className="w-full bg-[#EFF0F6] cursor-pointer h-10 sm:h-11 rounded-lg pl-9 sm:pl-10 pr-4 text-sm sm:text-base outline-none appearance-none">
                   <option value="">Select Time</option>
                   <option value="">08:30 AM</option>
                   <option value="">12:30 PM</option>
@@ -209,9 +209,9 @@ function Details() {
             </div>
 
             <div>
-              <label className="hidden text-base sm:text-lg md:text-xl font-semibold sm:block mb-2 sm:mb-3">Choose Location</label>
+              <label className="hidden text-sm sm:text-base font-semibold sm:block mb-2">Choose Location</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] h-11 cursor-pointer sm:h-12 md:h-13 rounded-lg pl-10 sm:pl-12 pr-5 text-sm sm:text-base md:text-lg outline-none appearance-none">
+                <select className="w-full bg-[#EFF0F6] h-10 cursor-pointer sm:h-11 rounded-lg pl-9 sm:pl-10 pr-4 text-sm sm:text-base outline-none appearance-none">
                   <option value="">Select Location</option>
                   <option value="">Jakarta</option>
                   <option value="">Bandung</option>
@@ -239,23 +239,23 @@ function Details() {
             </div>
             
             <div className="flex items-end">
-              <button className="bg-[#1D4ED8] hover:bg-[#1a45b8] cursor-pointer text-white w-full h-11 sm:h-12 md:h-13 rounded-lg transition-colors text-sm sm:text-base md:text-lg font-medium">
+              <button className="bg-[#1D4ED8] hover:bg-[#1a45b8] cursor-pointer text-white w-full h-10 sm:h-11 rounded-lg transition-colors text-sm sm:text-base font-medium">
                 Filter
               </button>
             </div>
           </div>
         </section>
 
-        <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-6 sm:py-8 md:py-10">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mb-6 sm:mb-8">
-            <h2 className="text-lg sm:text-xl md:text-2xl font-semibold">Choose Cinema</h2>
-            <span className="text-base sm:text-lg md:text-xl text-[#8692A6]">39 Results</span>
+        <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-4 sm:py-6 md:py-8">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+            <h2 className="text-base sm:text-lg md:text-xl font-semibold">Choose Cinema</h2>
+            <span className="text-sm sm:text-base text-[#8692A6]">39 Results</span>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-5 mb-6 sm:mb-8">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div 
               onClick={() => handleCinemaClick(0)}
-              className={`flex items-center justify-center border-2 rounded-lg p-4 sm:p-6 md:p-8 transition-colors cursor-pointer ${
+              className={`flex items-center justify-center border-2 rounded-lg p-3 sm:p-4 md:p-5 transition-colors cursor-pointer ${
                 selectedCinema === 0 
                   ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
                   : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
@@ -264,13 +264,13 @@ function Details() {
               <img 
                 src={EbvLogo} 
                 alt="EBV Cinema" 
-                className={`w-20 h-auto sm:w-24 md:w-28 lg:w-32 ${selectedCinema === 0 ? 'brightness-0 invert' : ''}`} 
+                className={`w-16 h-auto sm:w-20 md:w-24 ${selectedCinema === 0 ? 'brightness-0 invert' : ''}`} 
               />
             </div>
             
             <div 
               onClick={() => handleCinemaClick(1)}
-              className={`flex items-center justify-center border-2 rounded-lg p-4 sm:p-6 md:p-8 transition-colors cursor-pointer ${
+              className={`flex items-center justify-center border-2 rounded-lg p-3 sm:p-4 md:p-5 transition-colors cursor-pointer ${
                 selectedCinema === 1 
                   ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
                   : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
@@ -279,13 +279,13 @@ function Details() {
               <img 
                 src={HiflixLogo} 
                 alt="Hiflix Cinema" 
-                className={`w-20 h-auto sm:w-24 md:w-28 lg:w-32 ${selectedCinema === 1 ? 'brightness-0 invert' : ''}`} 
+                className={`w-16 h-auto sm:w-20 md:w-24 ${selectedCinema === 1 ? 'brightness-0 invert' : ''}`} 
               />
             </div>
             
             <div 
               onClick={() => handleCinemaClick(2)}
-              className={`flex items-center justify-center border-2 rounded-lg p-4 sm:p-6 md:p-8 transition-colors cursor-pointer ${
+              className={`flex items-center justify-center border-2 rounded-lg p-3 sm:p-4 md:p-5 transition-colors cursor-pointer ${
                 selectedCinema === 2 
                   ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
                   : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
@@ -294,13 +294,13 @@ function Details() {
               <img 
                 src={CineOneLogo} 
                 alt="CineOne Cinema" 
-                className={`w-20 h-auto sm:w-24 md:w-28 lg:w-32 ${selectedCinema === 2 ? 'brightness-0 invert' : ''}`} 
+                className={`w-16 h-auto sm:w-20 md:w-24 ${selectedCinema === 2 ? 'brightness-0 invert' : ''}`} 
               />
             </div>
             
             <div 
               onClick={() => handleCinemaClick(3)}
-              className={`flex items-center justify-center border-2 rounded-lg p-4 sm:p-6 md:p-8 transition-colors cursor-pointer ${
+              className={`flex items-center justify-center border-2 rounded-lg p-3 sm:p-4 md:p-5 transition-colors cursor-pointer ${
                 selectedCinema === 3 
                   ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
                   : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
@@ -309,30 +309,30 @@ function Details() {
               <img 
                 src={EbvLogo} 
                 alt="EBV Cinema" 
-                className={`w-20 h-auto sm:w-24 md:w-28 lg:w-32 ${selectedCinema === 3 ? 'brightness-0 invert' : ''}`} 
+                className={`w-16 h-auto sm:w-20 md:w-24 ${selectedCinema === 3 ? 'brightness-0 invert' : ''}`} 
               />
             </div>
           </div>
 
-          <div className="flex justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-            <button className="bg-[#1D4ED8] text-white w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex justify-center items-center hover:bg-[#1a45b8] transition-colors text-sm sm:text-base">
+          <div className="flex justify-center gap-2 mb-4 sm:mb-6">
+            <button className="bg-[#1D4ED8] text-white w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex justify-center items-center hover:bg-[#1a45b8] transition-colors text-sm">
               1
             </button>
-            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm sm:text-base">
+            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm">
               2
             </button>
-            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm sm:text-base">
+            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm">
               3
             </button>
-            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-10 sm:h-10 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm sm:text-base">
+            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm">
               4
             </button>
           </div>
 
-          <div className="text-center pb-6 sm:pb-8 md:pb-10">
+          <div className="text-center pb-4 sm:pb-6">
             <button 
               onClick={handleBookNow}
-              className="bg-[#1D4ED8] cursor-pointer hover:bg-[#1a45b8] text-white px-8 sm:px-12 md:px-16 py-3 sm:py-4 rounded-lg transition-colors text-base sm:text-lg md:text-xl font-medium"
+              className="bg-[#1D4ED8] cursor-pointer hover:bg-[#1a45b8] text-white px-6 sm:px-10 md:px-12 py-2.5 sm:py-3 rounded-lg transition-colors text-sm sm:text-base font-medium"
             >
               Book Now
             </button>

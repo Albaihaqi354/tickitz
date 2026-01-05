@@ -23,3 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+.dockerignore
+.gitignore
+Dockerfile
+koentji
+koentji.pub
+nginx.conf
