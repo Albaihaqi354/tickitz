@@ -18,5 +18,5 @@ jobs:
         with:
           image_name: ${{ github.repository }}/frontend
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          dockerfile: ./tickitz/Dockerfile
-          context: ./tickitz
+          dockerfile: ./Dockerfile
+          context: .
