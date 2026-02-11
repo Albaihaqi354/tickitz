@@ -22,7 +22,7 @@ Aplikasi ini dibangun menggunakan stack teknologi modern untuk performa dan skal
   - Filter jadwal film berdasarkan lokasi, tanggal, dan nama bioskop.
   - Kursi interaktif (termasuk tipe Love Nest).
   - Ringkasan pesanan sebelum pembayaran.
-- **Sistem Pembayaran**: Integrasi metode pembayaran populer (GoPay, Dana, Bank Transfer, dll).
+- **Sistem Pembayaran**: Integrasi metode pembayaran populer (GoPay, Dana, Bank Transfer).
 - **Profil Pengguna**: Manajemen informasi akun dan histori pemesanan tiket.
 - **Dashboard Admin**: (Khusus Admin) Kelola data film dan pantau statistik penjualan.
 - **Responsive Design**: Tampilan yang dioptimalkan untuk perangkat mobile dan desktop.
