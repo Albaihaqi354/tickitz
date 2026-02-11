@@ -1,31 +1,28 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { tmdbFetch } from "../../api/tmdb";
+import { backendFetch } from "../../api/backend";
 
 export const fetchNowPlaying = createAsyncThunk(
   "movie/fetchNowPlaying",
   async () => {
-    const promises = [1, 2, 3, 4].map(page => 
-      tmdbFetch(`/movie/now_playing?language=en-US&page=${page}`)
-    );
-    
-    const responses = await Promise.all(promises);
-    const allResults = responses.flatMap(response => response.results);    
-    return allResults;
+    const response = await backendFetch("/movies/popular");
+    return response.data;
   }
 );
 
 export const fetchUpcoming = createAsyncThunk(
   "movie/fetchUpcoming",
   async () => {
-    const data = await tmdbFetch("/movie/upcoming?language=en-US&page=1");
-    return data.results;
+    const response = await backendFetch("/movies/upcoming");
+    return response.data;
   }
 );
 
 export const fetchMovieDetail = createAsyncThunk(
   "movie/fetchMovieDetail",
   async (id) => {
-    return await tmdbFetch(`/movie/${id}?language=en-US`);
+    const response = await backendFetch(`/movies/detail/${id}`);
+    return response.data[0];
   }
 );
 

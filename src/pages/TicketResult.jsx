@@ -119,13 +119,15 @@ function TicketResult() {
                 </div>
                 <div>
                   <p className="text-gray-400 text-[16px]">Seats</p>
-                  <p className="font-semibold text-[18px]">{ticketData.selectedSeats.join(', ')}</p>
+                  <p className="font-semibold text-[18px]">
+                    {ticketData.selectedSeats.map(s => s.row_letter + s.seat_number).join(', ')}
+                  </p>
                 </div>
               </div>
 
-              <div className="flex justify-between items-center mt-5 border border-[#DEDEDE] p-4 rounded-lg">
-                <p className="font-semibold text-[20px]">Total</p>
-                <p className="font-bold text-lg">${ticketData.totalPrice.toFixed(2)}</p>
+              <div className="flex justify-between items-center mt-5 border border-[#1D4ED8]/20 bg-blue-50/30 p-4 rounded-lg">
+                <p className="font-bold text-[20px] text-gray-800">Total</p>
+                <p className="font-black text-2xl text-[#1D4ED8]">Rp{ticketData.totalPrice.toLocaleString('id-ID')}</p>
               </div>
             </div>
           </div>

@@ -4,6 +4,8 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import authReducer from "./slices/auth.slice";
 import movieReducer from "./slices/movie.slice";
+import userReducer from "./slices/user.slice";
+import orderReducer from "./slices/order.slice";
 
 const authPersistConfig = {
   key: "auth",
@@ -15,7 +17,9 @@ const persistedAuthReducer = persistReducer(authPersistConfig, authReducer);
 export const store = configureStore({
   reducer: {
     auth: persistedAuthReducer,
-    movie: movieReducer
+    movie: movieReducer,
+    user: userReducer,
+    order: orderReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

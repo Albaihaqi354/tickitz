@@ -1,0 +1,15 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VITE_DB_BASE_URL=http://192.168.50.121:5000
+    container_name: tickitz-frontend
+    ports:
+      - "3000:80"
+    networks:
+      - frontend-network
+
+networks:
+  frontend-network:

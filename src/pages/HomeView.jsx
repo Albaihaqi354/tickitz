@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNowPlaying } from '../redux/slices/movie.slice';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getImageUrl } from '../api/image';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Background from "../assets/image1.svg";
@@ -18,16 +19,11 @@ function HomeView() {
   
   const [search, setSearch] = useState(searchParams.get('search') || '');
   const [page, setPage] = useState(parseInt(searchParams.get('page')) || 1);
-  const [genre, setGenre] = useState(searchParams.get('genre') ? parseInt(searchParams.get('genre')) : null);
-
-  const TMDB_IMAGE_BASE = import.meta.env.VITE_TMDB_IMAGE_BASE;
-
-  const genreList = {
-    28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy", 80: "Crime", 99: "Documentary",
-    18: "Drama", 10751: "Family", 14: "Fantasy", 36: "History", 27: "Horror", 10402: "Music",
-    9648: "Mystery", 10749: "Romance", 878: "Science Fiction", 10770: "TV Movie", 53: "Thriller",
-    10752: "War", 37: "Western",
-  };
+  
+  const [selectedGenres, setSelectedGenres] = useState(() => {
+    const genreParam = searchParams.get('genre');
+    return genreParam ? genreParam.split(',') : [];
+  });
 
   useEffect(() => {
     dispatch(fetchNowPlaying());
@@ -36,22 +32,30 @@ function HomeView() {
   useEffect(() => {
     const params = {};
     if (search) params.search = search;
-    if (genre) params.genre = genre.toString();
+    if (selectedGenres.length > 0) params.genre = selectedGenres.join(',');
     if (page > 1) params.page = page.toString();
     
     setSearchParams(params, { replace: true });
-  }, [search, genre, page, setSearchParams]);
+  }, [search, selectedGenres, page, setSearchParams]);
 
   const filteredMovies = useMemo(() => {
     return nowPlaying
-      .filter((movie) => !genre || movie.genre_ids.includes(genre))
+      .filter((movie) => {
+        if (selectedGenres.length === 0) return true;
+        if (!movie.genres) return false;
+        
+        const movieGenreList = movie.genres.split(', ');
+        return selectedGenres.some(selected => 
+          movieGenreList.some(movieGenre => movieGenre.toLowerCase() === selected.toLowerCase())
+        );
+      })
       .filter((movie) =>
         movie.title.toLowerCase().includes(search.toLowerCase())
       );
-  }, [genre, search, nowPlaying]);
+  }, [selectedGenres, search, nowPlaying]);
 
   const ITEMS_PER_PAGE = 12;
-  const TOTAL_PAGES = 4;
+  const TOTAL_PAGES = Math.ceil(filteredMovies.length / ITEMS_PER_PAGE) || 1;
 
   const currentMovies = useMemo(() => {
     const startIndex = (page - 1) * ITEMS_PER_PAGE;
@@ -59,8 +63,18 @@ function HomeView() {
     return filteredMovies.slice(startIndex, endIndex);
   }, [filteredMovies, page]);
 
-  const handleGenreClick = (genreId) => {
-    setGenre(genreId === null ? null : parseInt(genreId));
+  const handleGenreClick = (genreName) => {
+    if (genreName === null) {
+      setSelectedGenres([]);
+    } else {
+      setSelectedGenres(prev => {
+        if (prev.includes(genreName)) {
+          return prev.filter(g => g !== genreName);
+        } else {
+          return [...prev, genreName];
+        }
+      });
+    }
     setPage(1);
   };
 
@@ -78,6 +92,16 @@ function HomeView() {
     setPage(pageToGo);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const availableGenres = useMemo(() => {
+    const genresSet = new Set();
+    nowPlaying.forEach(movie => {
+      if (movie.genres) {
+        movie.genres.split(', ').forEach(g => genresSet.add(g));
+      }
+    });
+    return Array.from(genresSet).sort();
+  }, [nowPlaying]);
 
   if (loading && nowPlaying.length === 0) {
     return (
@@ -141,19 +165,19 @@ function HomeView() {
                   key="all"
                   onClick={() => handleGenreClick(null)}
                   className={`${
-                    !genre
+                    selectedGenres.length === 0
                       ? "bg-[#1D4ED8] text-white"
                       : "text-[#4E4B66]"
                   } text-sm sm:text-base md:text-lg p-2 px-3 sm:px-4 md:px-5 rounded-md hover:bg-[#1a45b8] hover:text-white transition whitespace-nowrap`}
                 >
                   All
                 </button>
-                {Object.entries(genreList).map(([id, name]) => (
+                {availableGenres.map((name) => (
                   <button
-                    key={id}
-                    onClick={() => handleGenreClick(parseInt(id))}
+                    key={name}
+                    onClick={() => handleGenreClick(name)}
                     className={`${
-                      genre === parseInt(id)
+                      selectedGenres.includes(name)
                         ? "bg-[#1D4ED8] text-white"
                         : "text-[#4E4B66]"
                     } text-sm sm:text-base md:text-lg p-2 px-3 sm:px-4 md:px-5 rounded-md hover:bg-[#1a45b8] hover:text-white transition whitespace-nowrap`}
@@ -174,11 +198,7 @@ function HomeView() {
                     onClick={() => handleMovieClick(movie.id)}
                   >
                     <img
-                      src={
-                        movie.poster_path
-                          ? TMDB_IMAGE_BASE + movie.poster_path
-                          : "/fallback.jpg"
-                      }
+                      src={getImageUrl(movie.poster_url, "/fallback.jpg")}
                       alt={movie.title}
                       className="w-full h-72 sm:h-80 md:h-96 rounded-xl object-cover"
                     />
@@ -205,12 +225,12 @@ function HomeView() {
                   </p>
 
                   <div className="flex gap-2 sm:gap-2.5 mt-2 sm:mt-2.5 flex-wrap">
-                    {movie.genre_ids.slice(0, 2).map((id) => (
+                    {movie.genres && movie.genres.split(', ').slice(0, 2).map((name) => (
                       <p
-                        key={id}
+                        key={name}
                         className="bg-[#A0A3BD1A] text-[#A0A3BD] text-xs sm:text-sm md:text-base p-1 px-2 sm:px-3 rounded-full"
                       >
-                        {genreList[id]}
+                        {name}
                       </p>
                     ))}
                   </div>
@@ -226,7 +246,7 @@ function HomeView() {
           </div>
 
           <div className="flex justify-center gap-3 sm:gap-4 md:gap-5 mt-8 sm:mt-10 pb-10">
-            {[1, 2, 3, 4].map((pageNum) => (
+            {Array.from({ length: TOTAL_PAGES }, (_, i) => i + 1).map((pageNum) => (
               <button
                 key={pageNum}
                 onClick={() => handlePageClick(pageNum)}
@@ -239,21 +259,23 @@ function HomeView() {
                 {pageNum}
               </button>
             ))}
-            <button 
-              onClick={() => handlePageClick(Math.min(page + 1, TOTAL_PAGES))}
-              disabled={page === TOTAL_PAGES}
-              className={`${
-                page === TOTAL_PAGES
-                  ? 'bg-gray-300' 
-                  : 'bg-[#1D4ED8] hover:bg-[#1a45b8]'
-              } w-8 h-8 sm:w-10 cursor-pointer sm:h-10 rounded-full flex justify-center items-center transition`}
-            >
-              <img
-                src={ArrowRightIcon}
-                alt="Arrow Right"
-                className="w-4 sm:w-5 md:w-6"
-              />
-            </button>
+            {TOTAL_PAGES > 1 && (
+              <button 
+                onClick={() => handlePageClick(Math.min(page + 1, TOTAL_PAGES))}
+                disabled={page === TOTAL_PAGES}
+                className={`${
+                  page === TOTAL_PAGES
+                    ? 'bg-gray-300' 
+                    : 'bg-[#1D4ED8] hover:bg-[#1a45b8]'
+                } w-8 h-8 sm:w-10 cursor-pointer sm:h-10 rounded-full flex justify-center items-center transition`}
+              >
+                <img
+                  src={ArrowRightIcon}
+                  alt="Arrow Right"
+                  className="w-4 sm:w-5 md:w-6"
+                />
+              </button>
+            )}
           </div>
         </section>
       </main>

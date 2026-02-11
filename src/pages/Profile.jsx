@@ -1,10 +1,22 @@
 import OrderHistory from "../components/OrderHistory";
 import Star from "../assets/star.svg";
 import ButtonScrollToTop from "../components/ButtonScrolToTop";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchProfile } from "../redux/slices/user.slice";
+import { getImageUrl } from "../api/image";
 
 function Profile() {
     const [activeTab, setActiveTab] = useState("account");
+    const dispatch = useDispatch();
+    const { token } = useSelector(state => state.auth);
+    const { profile, loading } = useSelector(state => state.user);
+
+    useEffect(() => {
+        if (token) {
+            dispatch(fetchProfile(token));
+        }
+    }, [dispatch, token]);
 
     return (
     <>
@@ -18,14 +30,18 @@ function Profile() {
               <span className="bg-[#5F2EEA] w-2 h-2 rounded-full"></span>
             </div>
           </div>
-          <div className="flex flex-col items-center m-8 mt-10">
+          <div className="flex flex-col items-center m-8 mt-10 text-center">
             <img
-              src=""
+              src={getImageUrl(profile?.profile_image, "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22160%22%20height%3D%22160%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20160%20160%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_15ba800aa91%20text%20%7B%20fill%3A%23AAAAAA%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A12pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_15ba800aa91%22%3E%3Crect%20width%3D%22160%22%20height%3D%22160%22%20fill%3D%22%23EEEEEE%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2245%22%20y%3D%2285%22%3EProfile%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E")}
               alt="Profile"
-              className="bg-[#5F2EEA] rounded-full w-40 h-40"
+              className="bg-[#5F2EEA] rounded-full w-40 h-40 object-cover"
             />
-            <p className="text-2xl font-semibold mt-7">Jonas El Rodriguez</p>
-            <p className="mt-2 text-[18px] text-[#4E4B66]">Moviegoers</p>
+            <p className="text-2xl font-semibold mt-7">
+              {loading ? "Loading..." : (profile ? `${profile.first_name} ${profile.last_name || ""}` : "User Not Found")}
+            </p>
+            <p className="mt-2 text-[18px] text-[#4E4B66]">
+              {loading ? "..." : (profile?.role || "Moviegoers")}
+            </p>
           </div>
 
           <div className="border-t-2 border-[#DEDEDE] w-full mt-10"></div>
@@ -98,14 +114,18 @@ function Profile() {
                     </label>
                     <input
                       type="text"
-                      className="h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl"
+                      value={profile?.first_name || ""}
+                      readOnly
+                      className="h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl bg-gray-50"
                     />
                     <label htmlFor="" className="text-xl text-[#4E4B66] mt-5">
                       E-mail
                     </label>
                     <input
                       type="email"
-                      className="h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl"
+                      value={profile?.email || ""}
+                      readOnly
+                      className="h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl bg-gray-50"
                     />
                   </div>
 
@@ -115,14 +135,18 @@ function Profile() {
                     </label>
                     <input
                       type="text"
-                      className="h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl"
+                      value={profile?.last_name || ""}
+                      readOnly
+                      className="h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl bg-gray-50"
                     />
                     <label htmlFor="" className="text-xl text-[#4E4B66] mt-5">
                       Phone Number
                     </label>
                     <input
-                      type="number"
-                      className="h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl"
+                      type="text"
+                      value={profile?.phone_number || ""}
+                      readOnly
+                      className="h-15 mt-2 p-3 border-2 border-gray-300 rounded-xl bg-gray-50"
                     />
                   </div>
                 </form>

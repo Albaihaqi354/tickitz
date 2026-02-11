@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchNowPlaying, fetchUpcoming } from '../redux/slices/movie.slice';
+import { getImageUrl } from '../api/image';
 
 import ShieldIcon from '../assets/Shield.svg';
 import VectorIcon from '../assets/Vector.svg';
@@ -35,30 +36,6 @@ function Home() {
     if (upcomingIndex < allUpcoming.length - 4) {
       setUpcomingIndex(upcomingIndex + 1);
     }
-  };
-
-  const TMDB_IMAGE_BASE = import.meta.env.VITE_TMDB_IMAGE_BASE;
-
-  const genreList = {
-    28: "Action",
-    12: "Adventure",
-    16: "Animation",
-    35: "Comedy",
-    80: "Crime",
-    99: "Documentary",
-    18: "Drama",
-    10751: "Family",
-    14: "Fantasy",
-    36: "History",
-    27: "Horror",
-    10402: "Music",
-    9648: "Mystery",
-    10749: "Romance",
-    878: "Science Fiction",
-    10770: "TV Movie",
-    53: "Thriller",
-    10752: "War",
-    37: "Western"
   };
 
   useEffect(() => {
@@ -118,7 +95,7 @@ function Home() {
                     }`}
                   >
                     <img 
-                      src={TMDB_IMAGE_BASE + movie.poster_path} 
+                      src={getImageUrl(movie.poster_url)} 
                       alt={movie.title}
                       className='w-full h-full object-cover'
                     />
@@ -193,16 +170,16 @@ function Home() {
                 >
                   <div className='relative overflow-hidden rounded-xl'>
                     <img
-                      src={TMDB_IMAGE_BASE + movie.poster_path}
+                      src={getImageUrl(movie.poster_url)}
                       alt={movie.title}
                       className='w-full h-80 object-cover'
                     />
                   </div>
                   <p className='mt-3 text-lg font-semibold line-clamp-2'>{movie.title}</p>
                   <div className='flex gap-2 mt-2 flex-wrap'>
-                    {movie.genre_ids.slice(0, 2).map(id => (
-                      <span key={id} className='bg-[#A0A3BD1A] text-[#A0A3BD] text-sm px-3 py-1 rounded-full'>
-                        {genreList[id]}
+                    {movie.genres && movie.genres.split(', ').slice(0, 2).map((genre, idx) => (
+                      <span key={idx} className='bg-[#A0A3BD1A] text-[#A0A3BD] text-sm px-3 py-1 rounded-full'>
+                        {genre}
                       </span>
                     ))}
                   </div>
@@ -217,7 +194,7 @@ function Home() {
               <div key={movie.id} className='group'>
                 <div className='relative overflow-hidden rounded-xl cursor-pointer' onClick={() => handleMovieClick(movie.id)}>
                   <img
-                    src={TMDB_IMAGE_BASE + movie.poster_path}
+                    src={getImageUrl(movie.poster_url)}
                     alt={movie.title}
                     className='w-full h-96 object-cover transition-transform duration-300 group-hover:scale-105'
                   />
@@ -244,9 +221,9 @@ function Home() {
                 </div>
                 <p className='mt-4 text-lg font-semibold line-clamp-2'>{movie.title}</p>
                 <div className='flex gap-2 mt-2 flex-wrap'>
-                  {movie.genre_ids.slice(0, 2).map(id => (
-                    <span key={id} className='bg-[#A0A3BD1A] text-[#A0A3BD] text-sm px-3 py-1 rounded-full'>
-                      {genreList[id]}
+                  {movie.genres && movie.genres.split(', ').slice(0, 2).map((genre, idx) => (
+                    <span key={idx} className='bg-[#A0A3BD1A] text-[#A0A3BD] text-sm px-3 py-1 rounded-full'>
+                      {genre}
                     </span>
                   ))}
                 </div>
@@ -306,7 +283,7 @@ function Home() {
                 <div key={movie.id} className='flex-none w-56 group'>
                   <div className='relative overflow-hidden rounded-xl cursor-pointer' onClick={() => handleMovieClick(movie.id)}>
                     <img
-                      src={TMDB_IMAGE_BASE + movie.poster_path}
+                      src={getImageUrl(movie.poster_url)}
                       alt={movie.title}
                       className='w-full h-80 object-cover transition-transform duration-300 group-hover:scale-105'
                     />
@@ -336,9 +313,9 @@ function Home() {
                     {new Date(movie.release_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long'})}
                   </p>
                   <div className='flex gap-2 mt-2 flex-wrap'>
-                    {movie.genre_ids.slice(0, 2).map(id => (
-                      <span key={id} className='bg-[#A0A3BD1A] text-[#A0A3BD] text-sm px-3 py-1 rounded-full'>
-                        {genreList[id]}
+                    {movie.genres && movie.genres.split(', ').slice(0, 2).map((genre, idx) => (
+                      <span key={idx} className='bg-[#A0A3BD1A] text-[#A0A3BD] text-sm px-3 py-1 rounded-full'>
+                        {genre}
                       </span>
                     ))}
                   </div>
@@ -353,7 +330,7 @@ function Home() {
               <div key={movie.id} className='group'>
                 <div className='relative overflow-hidden rounded-xl cursor-pointer' onClick={() => handleMovieClick(movie.id)}>
                   <img
-                    src={TMDB_IMAGE_BASE + movie.poster_path}
+                    src={getImageUrl(movie.poster_url)}
                     alt={movie.title}
                     className='w-full h-96 object-cover transition-transform duration-300 group-hover:scale-105'
                   />
@@ -383,9 +360,9 @@ function Home() {
                   {new Date(movie.release_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long'})}
                 </p>
                 <div className='flex gap-2 mt-2 flex-wrap'>
-                  {movie.genre_ids.slice(0, 2).map(id => (
-                    <span key={id} className='bg-[#A0A3BD1A] text-[#A0A3BD] text-sm px-3 py-1 rounded-full'>
-                      {genreList[id]}
+                  {movie.genres && movie.genres.split(', ').slice(0, 2).map((genre, idx) => (
+                    <span key={idx} className='bg-[#A0A3BD1A] text-[#A0A3BD] text-sm px-3 py-1 rounded-full'>
+                      {genre}
                     </span>
                   ))}
                 </div>

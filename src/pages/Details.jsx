@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMovieDetail, fetchMovieCredits } from '../redux/slices/movie.slice';
+import { fetchMovieDetail } from '../redux/slices/movie.slice';
+import { fetchSchedules } from '../redux/slices/order.slice';
+import { getImageUrl } from '../api/image';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import EbvLogo from '../assets/ebv.svg';
@@ -14,9 +16,15 @@ function Details() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   
-  const { detail: movie, credits, loading } = useSelector((state) => state.movie);
+  const { detail: movie, loading: movieLoading } = useSelector((state) => state.movie);
+  const { schedules, loading: orderLoading } = useSelector((state) => state.order);
+  
+  const loading = movieLoading || orderLoading;
   
   const [selectedCinema, setSelectedCinema] = useState(null);
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
   
   const TMDB_IMAGE_BASE = import.meta.env.VITE_TMDB_IMAGE_BASE;
   const backdropBase = "https://image.tmdb.org/t/p/original";
@@ -29,8 +37,21 @@ function Details() {
     });
 
     dispatch(fetchMovieDetail(id));
-    dispatch(fetchMovieCredits(id));
+    dispatch(fetchSchedules({ movieId: id }));
   }, [id, dispatch]);
+
+  const uniqueCities = [...new Set(schedules.map(s => s.cinema_city))];
+  const uniqueDates = [...new Set(schedules.map(s => new Date(s.show_date).toISOString().split('T')[0]))];
+  const uniqueTimes = [...new Set(schedules
+    .filter(s => !selectedDate || new Date(s.show_date).toISOString().split('T')[0] === selectedDate)
+    .map(s => new Date(s.show_time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }))
+  )];
+  const availableCinemas = schedules.reduce((acc, s) => {
+    if (!acc.find(c => c.id === s.cinema_id)) {
+      acc.push({ id: s.cinema_id, name: s.cinema_name, logo: s.cinema_logo });
+    }
+    return acc;
+  }, []);
 
   const formatDuration = (minutes) => {
     const hours = Math.floor(minutes / 60);
@@ -38,17 +59,27 @@ function Details() {
     return `${hours} hour${hours > 1 ? 's' : ''} ${mins} minute${mins > 1 ? 's' : ''}`;
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-  };
-
   const handleCinemaClick = (cinemaId) => {
     setSelectedCinema(cinemaId);
   };
 
   const handleBookNow = () => {
-    navigate(`/movies/${id}/order`);
+    if (!selectedCinema || !selectedDate || !selectedTime) {
+      alert('Please select cinema, date, and time first');
+      return;
+    }
+
+    const selectedSchedule = schedules.find(s => 
+      s.cinema_id === selectedCinema &&
+      new Date(s.show_date).toISOString().split('T')[0] === selectedDate &&
+      new Date(s.show_time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }) === selectedTime
+    );
+
+    if (selectedSchedule) {
+      navigate(`/movies/${id}/order?schedule_id=${selectedSchedule.id}`);
+    } else {
+      alert('Schedule not found for the selected options');
+    }
   };
 
   if (loading) {
@@ -82,7 +113,7 @@ function Details() {
         <section className="relative -z-20">
           <div className="h-100 sm:h-full md:aspect-16/7 lg:aspect-21/9">
             <img 
-              src={movie.backdrop_path ? backdropBase + movie.backdrop_path : TMDB_IMAGE_BASE + movie.poster_path} 
+              src={movie.backdrop_path ? backdropBase + movie.backdrop_path : getImageUrl(movie.backdrop_url || movie.poster_url)} 
               alt={movie.title}
               className="w-full h-full object-cover"
             />
@@ -94,7 +125,7 @@ function Details() {
           <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
             <div className='flex justify-center lg:justify-start'>
               <img 
-                src={movie.poster_path ? TMDB_IMAGE_BASE + movie.poster_path : 'https://via.placeholder.com/400x600?text=No+Image'} 
+                src={movie.poster_path ? TMDB_IMAGE_BASE + movie.poster_path : getImageUrl(movie.poster_url, 'https://via.placeholder.com/400x600?text=No+Image')} 
                 alt={movie.title}
                 className="w-48 sm:w-56 md:w-64 lg:w-56 xl:w-64 h-auto rounded-xl object-cover shadow-lg"
               />
@@ -104,36 +135,38 @@ function Details() {
               <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold text-center lg:text-left">{movie.title}</h1>
               
               <div className="flex flex-wrap gap-2 mt-2 sm:mt-3 justify-center lg:justify-start">
-                {movie.genres && movie.genres.slice(0, 3).map(genre => (
-                  <span key={genre.id} className="bg-[#A0A3BD1A] text-[#A0A3BD] text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full">
-                    {genre.name}
-                  </span>
-                ))}
+                {movie.genres && (typeof movie.genres === 'string' ? movie.genres.split(', ') : movie.genres).slice(0, 3).map((genre) => {
+                  const name = typeof genre === 'string' ? genre : genre.name;
+                  const id = typeof genre === 'string' ? genre : genre.id;
+                  return (
+                    <span key={id} className="bg-[#A0A3BD1A] text-[#A0A3BD] text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full">
+                      {name}
+                    </span>
+                  );
+                })}
               </div>
 
               <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-6 sm:mt-8">
                 <div>
                   <p className="text-[#8692A6] text-xs sm:text-sm">Release date</p>
-                  <p className="text-sm sm:text-base mt-1">{movie.release_date ? formatDate(movie.release_date) : 'N/A'}</p>
+                  <p className="text-sm sm:text-base mt-1 font-semibold">
+                    {movie.release_date ? new Date(movie.release_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : 'N/A'}
+                  </p>
                 </div>
                 
                 <div>
                   <p className="text-[#8692A6] text-xs sm:text-sm">Directed by</p>
-                  <p className="text-sm sm:text-base mt-1">
-                    {credits?.crew?.find(person => person.job === 'Director')?.name || 'N/A'}
-                  </p>
+                  <p className="text-sm sm:text-base mt-1 font-semibold">{movie.director || 'N/A'}</p>
                 </div>
                 
                 <div>
                   <p className="text-[#8692A6] text-xs sm:text-sm">Duration</p>
-                  <p className="text-sm sm:text-base mt-1">{movie.runtime ? formatDuration(movie.runtime) : 'N/A'}</p>
+                  <p className="text-sm sm:text-base mt-1 font-semibold">{movie.duration ? formatDuration(movie.duration) : 'N/A'}</p>
                 </div>
                 
                 <div>
                   <p className="text-[#8692A6] text-xs sm:text-sm">Casts</p>
-                  <p className="text-sm sm:text-base mt-1">
-                    {credits?.cast?.slice(0, 3).map(actor => actor.name).join(', ') || 'N/A'}
-                  </p>
+                  <p className="text-sm sm:text-base mt-1 font-semibold">{movie.cast || 'N/A'}</p>
                 </div>
               </div>
             </div>
@@ -141,8 +174,8 @@ function Details() {
 
           <div className="mt-6 sm:mt-8">
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold">Synopsis</h2>
-            <p className="mt-2 sm:mt-3 text-sm sm:text-base text-[#A0A3BD] leading-6 sm:leading-7">
-              {movie.overview || 'No synopsis available.'}
+            <p className="mt-2 sm:mt-3 text-sm sm:text-base text-[#4E4B66] leading-6 sm:leading-7">
+              {movie.synopsis || 'No synopsis available.'}
             </p>
           </div>
         </section>
@@ -154,26 +187,16 @@ function Details() {
             <div>
               <label className="hidden text-sm sm:text-base font-semibold sm:block mb-2">Choose Date</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] cursor-pointer h-10 sm:h-11 rounded-lg pl-9 sm:pl-10 pr-4 text-sm sm:text-base outline-none appearance-none">
+                <select 
+                  className="w-full bg-[#EFF0F6] cursor-pointer h-10 sm:h-11 rounded-lg px-4 text-sm sm:text-base outline-none appearance-none"
+                  onChange={(e) => setSelectedDate(e.target.value)}
+                >
                   <option value="">Select Date</option>
-                  <option value="">Today</option>
-                  <option value="">Tomorrow</option>
-                  <option value="">Next Week</option>
+                  {uniqueDates.map(date => (
+                    <option key={date} value={date}>{new Date(date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</option>
+                  ))}
                 </select>
-                <svg 
-                  className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-600 pointer-events-none"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <svg 
-                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-gray-600 pointer-events-none"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
@@ -182,27 +205,16 @@ function Details() {
             <div className='hidden sm:block'>
               <label className="text-sm sm:text-base font-semibold block mb-2">Choose Time</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] cursor-pointer h-10 sm:h-11 rounded-lg pl-9 sm:pl-10 pr-4 text-sm sm:text-base outline-none appearance-none">
+                <select 
+                  className="w-full bg-[#EFF0F6] cursor-pointer h-10 sm:h-11 rounded-lg px-4 text-sm sm:text-base outline-none appearance-none"
+                  onChange={(e) => setSelectedTime(e.target.value)}
+                >
                   <option value="">Select Time</option>
-                  <option value="">08:30 AM</option>
-                  <option value="">12:30 PM</option>
-                  <option value="">03:30 PM</option>
-                  <option value="">07:30 PM</option>
+                  {uniqueTimes.map(time => (
+                    <option key={time} value={time}>{time}</option>
+                  ))}
                 </select>
-                <svg 
-                  className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-600 pointer-events-none"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <svg 
-                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-gray-600 pointer-events-none"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
@@ -211,35 +223,29 @@ function Details() {
             <div>
               <label className="hidden text-sm sm:text-base font-semibold sm:block mb-2">Choose Location</label>
               <div className="relative">
-                <select className="w-full bg-[#EFF0F6] h-10 cursor-pointer sm:h-11 rounded-lg pl-9 sm:pl-10 pr-4 text-sm sm:text-base outline-none appearance-none">
+                <select 
+                  className="w-full bg-[#EFF0F6] h-10 cursor-pointer sm:h-11 rounded-lg px-4 text-sm sm:text-base outline-none appearance-none"
+                  onChange={(e) => {
+                    setSelectedCity(e.target.value);
+                    dispatch(fetchSchedules({ movieId: id, city: e.target.value }));
+                  }}
+                >
                   <option value="">Select Location</option>
-                  <option value="">Jakarta</option>
-                  <option value="">Bandung</option>
-                  <option value="">Surabaya</option>
-                  <option value="">Bogor</option>
+                  {uniqueCities.map(city => (
+                    <option key={city} value={city}>{city}</option>
+                  ))}
                 </select>
-                <svg 
-                  className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-600 pointer-events-none"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <svg 
-                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-3 h-3 sm:w-4 sm:h-4 text-gray-600 pointer-events-none"
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
+                <svg className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-600 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
             </div>
             
             <div className="flex items-end">
-              <button className="bg-[#1D4ED8] hover:bg-[#1a45b8] cursor-pointer text-white w-full h-10 sm:h-11 rounded-lg transition-colors text-sm sm:text-base font-medium">
+              <button 
+                onClick={() => dispatch(fetchSchedules({ movieId: id, city: selectedCity }))}
+                className="bg-[#1D4ED8] hover:bg-[#1a45b8] cursor-pointer text-white w-full h-10 sm:h-11 rounded-lg transition-colors text-sm sm:text-base font-medium"
+              >
                 Filter
               </button>
             </div>
@@ -249,84 +255,37 @@ function Details() {
         <section className="px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-4 sm:py-6 md:py-8">
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
             <h2 className="text-base sm:text-lg md:text-xl font-semibold">Choose Cinema</h2>
-            <span className="text-sm sm:text-base text-[#8692A6]">39 Results</span>
+            <span className="text-sm sm:text-base text-[#8692A6]">{schedules.length} Results</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
-            <div 
-              onClick={() => handleCinemaClick(0)}
-              className={`flex items-center justify-center border-2 rounded-lg p-3 sm:p-4 md:p-5 transition-colors cursor-pointer ${
-                selectedCinema === 0 
-                  ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
-                  : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
-              }`}
-            >
-              <img 
-                src={EbvLogo} 
-                alt="EBV Cinema" 
-                className={`w-16 h-auto sm:w-20 md:w-24 ${selectedCinema === 0 ? 'brightness-0 invert' : ''}`} 
-              />
-            </div>
-            
-            <div 
-              onClick={() => handleCinemaClick(1)}
-              className={`flex items-center justify-center border-2 rounded-lg p-3 sm:p-4 md:p-5 transition-colors cursor-pointer ${
-                selectedCinema === 1 
-                  ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
-                  : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
-              }`}
-            >
-              <img 
-                src={HiflixLogo} 
-                alt="Hiflix Cinema" 
-                className={`w-16 h-auto sm:w-20 md:w-24 ${selectedCinema === 1 ? 'brightness-0 invert' : ''}`} 
-              />
-            </div>
-            
-            <div 
-              onClick={() => handleCinemaClick(2)}
-              className={`flex items-center justify-center border-2 rounded-lg p-3 sm:p-4 md:p-5 transition-colors cursor-pointer ${
-                selectedCinema === 2 
-                  ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
-                  : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
-              }`}
-            >
-              <img 
-                src={CineOneLogo} 
-                alt="CineOne Cinema" 
-                className={`w-16 h-auto sm:w-20 md:w-24 ${selectedCinema === 2 ? 'brightness-0 invert' : ''}`} 
-              />
-            </div>
-            
-            <div 
-              onClick={() => handleCinemaClick(3)}
-              className={`flex items-center justify-center border-2 rounded-lg p-3 sm:p-4 md:p-5 transition-colors cursor-pointer ${
-                selectedCinema === 3 
-                  ? 'bg-[#1D4ED8] border-[#1D4ED8]' 
-                  : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
-              }`}
-            >
-              <img 
-                src={EbvLogo} 
-                alt="EBV Cinema" 
-                className={`w-16 h-auto sm:w-20 md:w-24 ${selectedCinema === 3 ? 'brightness-0 invert' : ''}`} 
-              />
-            </div>
+            {availableCinemas.length > 0 ? (
+              availableCinemas.map((cinema) => (
+                <div 
+                  key={cinema.id}
+                  onClick={() => handleCinemaClick(cinema.id)}
+                  className={`flex items-center justify-center border-2 rounded-lg p-3 sm:p-4 md:p-5 transition-colors cursor-pointer ${
+                    selectedCinema === cinema.id ? 'bg-[#1D4ED8] border-[#1D4ED8]' : 'border-[#DEDEDE] hover:border-[#1D4ED8]'
+                  }`}
+                >
+                  <img 
+                    src={cinema.name.includes('EBV') ? EbvLogo : cinema.name.includes('Hiflix') ? HiflixLogo : CineOneLogo} 
+                    alt={cinema.name} 
+                    className={`w-16 h-auto sm:w-20 md:w-24 ${selectedCinema === cinema.id ? 'brightness-0 invert' : ''}`} 
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-4 text-gray-400">No cinemas available for this movie.</div>
+            )}
           </div>
 
           <div className="flex justify-center gap-2 mb-4 sm:mb-6">
-            <button className="bg-[#1D4ED8] text-white w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex justify-center items-center hover:bg-[#1a45b8] transition-colors text-sm">
-              1
-            </button>
-            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm">
-              2
-            </button>
-            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm">
-              3
-            </button>
-            <button className="bg-[#F9FAFB] text-[#A0A3BD] w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex justify-center items-center hover:bg-[#1D4ED8] hover:text-white transition-colors text-sm">
-              4
-            </button>
+            {[1, 2, 3, 4].map(page => (
+              <button key={page} className={`w-8 h-8 sm:w-9 sm:h-9 rounded-lg flex justify-center items-center transition-colors text-sm ${page === 1 ? 'bg-[#1D4ED8] text-white' : 'bg-[#F9FAFB] text-[#A0A3BD] hover:bg-[#1D4ED8] hover:text-white'}`}>
+                {page}
+              </button>
+            ))}
           </div>
 
           <div className="text-center pb-4 sm:pb-6">

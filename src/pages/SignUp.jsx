@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import TickitzLogo from '../assets/tickitz1.svg'
 import Background from '../assets/image1.svg'
 import GoogleIcon from '../assets/google.svg'
 import FacebookIcon from '../assets/facebook.svg'
 import { useNavigate } from 'react-router'
-import { useUserContext } from '../contexts/userManagement/UserProvider'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerUser, clearError } from '../redux/slices/auth.slice'
 
 function SignUp() {
   const [email, setEmail] = useState("")
@@ -13,8 +14,13 @@ function SignUp() {
   const [agreeToTerms, setAgreeToTerms] = useState(false)
   const [errors, setErrors] = useState({})
 
-  const { registerUser, isLoading, error } = useUserContext()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { loading, error } = useSelector(state => state.auth)
+
+  useEffect(() => {
+    dispatch(clearError())
+  }, [dispatch])
 
   const validateForm = () => {
     const newErrors = {}
@@ -41,18 +47,21 @@ function SignUp() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault()
     
     if (validateForm()) {
-      const result = await registerUser(email, password)
-      
-      if (result.success) {
-        setEmail("")
-        setPassword("")
-        setAgreeToTerms(false)
-        navigate("/auth/signIn")
-      }
+      dispatch(registerUser({ email, password }))
+        .unwrap()
+        .then(() => {
+          setEmail("")
+          setPassword("")
+          setAgreeToTerms(false)
+          navigate("/auth/signIn")
+        })
+        .catch((err) => {
+          console.error("Registration failed:", err)
+        })
     }
   }
 
@@ -140,7 +149,7 @@ function SignUp() {
                       </svg>
                     ) : (
                       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <path d="M1 12S4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                         <circle cx="12" cy="12" r="3" />
                       </svg>
                     )}
@@ -170,12 +179,12 @@ function SignUp() {
               <button 
                 type="submit" 
                 className="w-full h-15 mt-4 rounded-md bg-blue-700 text-white flex items-center justify-center"
-                disabled={isLoading}
+                disabled={loading}
               >
-                {isLoading ? (
+                {loading ? (
                   <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    <path className="opacity-75" fill="currentColor" d="M4 12A8 8 0 018-8V0C5.373 0 0 5.373 0 12H4ZM6 17.291A7.962 7.962 0 014 12H0C0 15.042 1.135 17.824 3 19.938L6 17.291Z"></path>
                   </svg>
                 ) : null}
                 Sign Up
