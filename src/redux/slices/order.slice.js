@@ -51,16 +51,16 @@ export const createOrder = createAsyncThunk(
     "order/createOrder",
     async ({ scheduleId, seats, paymentMethod, token }, { rejectWithValue }) => {
         try {
-            const response = await backendFetch("/orders", {
+            const response = await backendFetch("/orders/", {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-                body: JSON.stringify({
+                body: {
                     schedule_id: parseInt(scheduleId),
                     seats: seats.map(s => s.seat_id),
                     payment_method: paymentMethod,
-                }),
+                },
             });
             return response.data;
         } catch (error) {
