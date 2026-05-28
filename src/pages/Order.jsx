@@ -51,7 +51,8 @@ function Order() {
     });
   };
 
-  const ticketPrice = schedule?.price || 0;
+  const TICKET_PRICE = 50000;
+  const ticketPrice = schedule?.price || TICKET_PRICE;
   const showDate = schedule?.show_date ? new Date(schedule.show_date).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : '-';
   const showTime = schedule?.show_time ? new Date(schedule.show_time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) : '-';
 
