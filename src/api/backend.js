@@ -21,7 +21,9 @@ export const backendFetch = async (endpoint, options = {}) => {
         config.body = JSON.stringify(body);
     }
 
-    const res = await fetch(`${BASE_URL}${endpoint}`, config);
+    // Tambahkan /api prefix jika belum ada
+    const normalizedEndpoint = endpoint.startsWith('/api') ? endpoint : `/api${endpoint}`;
+    const res = await fetch(`${BASE_URL}${normalizedEndpoint}`, config);
     const result = await res.json();
 
     if (!res.ok) {
